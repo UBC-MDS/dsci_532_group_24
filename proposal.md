@@ -21,3 +21,9 @@ Dataset for total number of child deaths contains observations from 194 countrie
 Information on how the child mortality data are collected is available on [Gapminder summary documentation](https://www.gapminder.org/data/documentation/gd005/).
 
 The method of approximation for annual estimates of childhood mortality is described in a [2013 report by WHO](https://www.who.int/gho/child_health/mortality/ChildCME_method.pdf).
+
+
+
+## Research questions and usage scenarios
+
+Aiden is a volunteer of an international charity focusing on help children across the African continent. Recently he got a new project to provide lifesaving medication and recruit medical professional volunteers (nurses, doctors etc.) to African children in need. He wants to explore the dataset in order to know which countries in Africa need this help the most, and what is the most common diseases to cause the death of children in Africa. In this case, ‘African Children Health app’ could be a good place to start. In the app, he could see the children (aged 0 -5 years) mortality of every country across the Africa from 1990 – 2015, and the main causes of the death, like which disease. He could rank the mortality to figure out the candidates’ countries may need help, and what kind of diseases are in the most serious locally. After that, Aiden could do some follow-on research based on the information he got from the app and draft a proposal to his supervisor to suggest what kind of medications are necessary and which country should be helped first.
