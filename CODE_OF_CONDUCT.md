@@ -1,7 +1,7 @@
 # Code of Conduct
 
 ## Introduction
-For the DSCI 532 project, group 26 is committed to forming a friendly and effective team environment in which members are expected to learn, practice and accomplish project tasks. Aside from striving to finish academic goals, we hereby list a set of guidelines that gravitate us towards working as an ethical, respectful and coherent team. 
+For the DSCI 532 project, group 24 is committed to forming a friendly and effective team environment in which members are expected to learn, practice and accomplish project tasks. Aside from striving to finish academic goals, we hereby list a set of guidelines that gravitate us towards working as an ethical, respectful and coherent team. 
 
 We acknowledge that we should strictly follow [UBC](https://students.ubc.ca/campus-life/student-code-conduct) and [MDS](https://ubc-mds.github.io/resources_pages/code_of_conduct/) rules and codes of conduct. 
 
