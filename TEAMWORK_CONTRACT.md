@@ -80,4 +80,4 @@ The team should acknowledge extra work and effort made by team-members, and gene
 
 - Junghoo is not available on Fridays 8 am - 4 pm.
 
-- Eric is generally available in the evening evening, and on Fridays and Saturdays.
+- Eric is generally available in the evening, and on Fridays and Saturdays.
