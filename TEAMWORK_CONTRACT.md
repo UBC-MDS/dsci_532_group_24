@@ -13,7 +13,7 @@ The team will work closely together towards a successful DSCI 532 course project
 This document governs how team members will work together through friendly, close, and efficient communication. 
 
 ## Schedules and deadlines:
-- Meet every Friday at 2:00- 3:00pm PST.
+- Meet every Friday at 4:00- 5:00pm PST.
 
 We believe that efficient meetings are the cornerstone of success at this course and collaborative projects at MDS in general. We highly value the skills that we obtain from organizing and participating in meetings for this course. 
 
