@@ -43,3 +43,7 @@ She remembers that the volunteer team commented last year that child mortality f
 In this case, ‘African Children Health app’ could be a good place to start. In the app, he can visualize the children (aged 0 -5 years) mortality of every country across the Africa from 1990 – 2015, and the diseases responsible for these deaths. He can rank the countries and the causes of child mortality to figure out which candidates countries may require the most help, and what kind of infectious diseases are most serious in the region. 
 
 Using this information from the app, Aiden can do conduct follow-on research to draft a proposal to his supervisor to suggest the type of medications that are necessary and which countries to deploy the volunteer health care providers.
+
+### Sketch of app:
+
+![](app_sketch.PNG)
