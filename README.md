@@ -6,7 +6,7 @@ While working with rich Gapminder datasets will help us provide a wealth of info
 
 There will be a horizontal interface at the top of the page consisting of (1) drop-down menu with checkboxes where users can select multiple countries, (2) slider to view the shift in data across different years, and (3) drop-down menu where users can select different diseases. 
 
-The visual components include the map of African continent at the centre and two sorted bar plots, one on each side of the map. The map will serve 2 purpose: (1) it provides the geographical information to the user, who may be interested in the proximity of different countries to each other (e.g. shipping medical supplies to multiple countries), and (2) it provides a heat map for child mortality.
+The visual components include the map of African continent at the centre and two sorted bar plots, one on each side of the map. The map will serve 2 purposes: (1) it provides the geographical information to the user, who may be interested in the proximity of different countries to each other (e.g. shipping medical supplies to multiple countries), and (2) it provides a heat map for child mortality.
  
 To the left of the map, there will be a bar chart displaying the total child mortality for each country, accounting for all diseases selected by the user, ranked in the descending order; similarly, to the right of the map, there will be a bar chart displaying the total child mortality for each disease, accounting for all countries selected by the user, ranked in the descending order. 
 

@@ -1,0 +1,8 @@
+File_name,Variable_name,Description,Source
+child_mortality_0_5_year_olds_dying_per_1000_born.csv,child_mortality_0_5_year_olds_dying_per_1000_born,"Death of children under five years of age per 1,000 live births",https://www.gapminder.org/data/documentation/gd005/
+hiv_deaths_in_children_1_59_months_total_deaths.csv,hiv_deaths_in_children_1_59_months_total_deaths,HIV deaths in children 1 – 59 months (total deaths),https://www.who.int/healthinfo/global_burden_disease/en/
+malaria_deaths_in_children_1_59_months_total_deaths.csv,malaria_deaths_in_children_1_59_months_total_deaths,Malaria deaths in children 1-59 months (total deaths),https://www.who.int/healthinfo/global_burden_disease/en/
+measles_deaths_in_children_1_59_months_total_deaths.csv,measles_deaths_in_children_1_59_months_total_deaths,Measles deaths in children 1-59 months (total deaths),https://www.who.int/healthinfo/global_burden_disease/en/
+meningitis_deaths_in_children_1_59_months_total_deaths.csv,meningitis_deaths_in_children_1_59_months_total_deaths,Meningitis deaths in children 1-59 months (total deaths) ,https://www.who.int/healthinfo/global_burden_disease/en/
+ncd_deaths_in_children_1_59_months_total_deaths.csv,ncd_deaths_in_children_1_59_months_total_deaths,NCD deaths in children 1-59 months (total deaths) ,https://www.who.int/healthinfo/global_burden_disease/en/
+number_of_child_deaths.csv,number_of_child_deaths,The number of children dying before age 5,https://www.who.int/healthinfo/global_burden_disease/en/
