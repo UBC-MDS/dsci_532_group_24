@@ -80,11 +80,11 @@ disease_count_map_data = pd.DataFrame.merge(
 year_controller = html.Div(
     [
         "Year",
-        dcc.RangeSlider(
+        dcc.Slider(
             id="year_widget",
             min=1990,
-            max=2019,
-            value=[2000, 2010],
+            max=2015,
+            value=2015,
             marks={
                 1990: "1990",
                 1995: "1995",
@@ -102,10 +102,11 @@ country_controller = html.Div(
         "Country",
         dcc.Dropdown(
             id="country_widget",
-            value=["Angola"],
+            value=country_list,
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
+            style={ "overflow-y":"scroll", "height": "100px"}
         ),
     ]
 )
@@ -115,10 +116,11 @@ disease_controller = html.Div(
         "Disease",
         dcc.Dropdown(
             id="disease_widget",
-            value=["HIV"],
+            value=disease_list,
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
+            style={ "overflow-y":"scroll", "height": "100px"}
         ),
     ]
 )
@@ -134,8 +136,8 @@ app.layout = dbc.Container(
             [
                 dbc.Row(
                     [
-                        dbc.Col(year_controller),
                         dbc.Col(country_controller),
+                        dbc.Col(year_controller),
                         dbc.Col(disease_controller),
                     ]
                 ),
@@ -146,7 +148,7 @@ app.layout = dbc.Container(
                                 id="country_chart",
                                 style={
                                     "border-width": "0",
-                                    "width": "20vw",
+                                    "width": "100%",
                                     "height": "50vh",
                                 },
                             )
@@ -156,7 +158,7 @@ app.layout = dbc.Container(
                                 id="map",
                                 style={
                                     "border-width": "0",
-                                    "width": "20vw",
+                                    "width": "100%",
                                     "height": "50vh",
                                 },
                             )
@@ -166,7 +168,7 @@ app.layout = dbc.Container(
                                 id="disease_chart",
                                 style={
                                     "border-width": "0",
-                                    "width": "20vw",
+                                    "width": "100%",
                                     "height": "50vh",
                                 },
                             )
@@ -175,7 +177,8 @@ app.layout = dbc.Container(
                 ),
             ]
         ),
-    ]
+    ],
+    fluid = True
 )
 
 # Define charts
@@ -186,35 +189,40 @@ app.layout = dbc.Container(
     Input("country_widget", "value"),
     Input("disease_widget", "value"),
 )
-def plot_country(year_range, countries, diseases):
-    year_chart = (
+def plot_country(year, countries, diseases):
+    country_chart = (
         alt.Chart(
             disease_count_data[
-                (disease_count_data["year"] >= year_range[0])
-                & (disease_count_data["year"] <= year_range[1])
+                (disease_count_data["year"] == year)
                 & (disease_count_data["country"].isin(countries))
                 & (disease_count_data["disease"].isin(diseases))
             ]
         )
-        .mark_line()
+        .mark_bar()
         .encode(
             x=alt.X(
-                "year",
-                scale=alt.Scale(zero=False),
-                title="Year",
-                axis=alt.Axis(format="d"),
-            ),
-            y=alt.Y(
                 field="count",
                 aggregate="sum",
                 type="quantitative",
                 title="Number of deaths",
             ),
+            y=alt.Y(
+                "country",
+                scale=alt.Scale(zero=False),
+                title="Country",
+                sort=alt.SortField(
+                    field='count',
+                    order='descending'
+                )
+            ),
             color=alt.Color("country", title="Country"),
-        )
+        ).transform_window(
+            window=[{'op': 'rank', 'as': 'rank'}],
+            sort=[{'field': 'count', 'order': 'descending'}]
+        ).transform_filter('datum.rank <= 5')
         .configure_legend(orient="top")
     )
-    return year_chart.to_html()
+    return country_chart.to_html()
 
 
 ## Chart by disease
@@ -224,37 +232,40 @@ def plot_country(year_range, countries, diseases):
     Input("country_widget", "value"),
     Input("disease_widget", "value"),
 )
-def plot_disease(year_range, countries, diseases):
-    year_chart = (
+def plot_disease(year, countries, diseases):
+    disease_chart = (
         alt.Chart(
             disease_count_data[
-                (disease_count_data["year"] >= year_range[0])
-                & (disease_count_data["year"] <= year_range[1])
+                (disease_count_data["year"] >= year)
                 & (disease_count_data["country"].isin(countries))
                 & (disease_count_data["disease"].isin(diseases))
             ]
         )
-        .mark_line()
+        .mark_bar()
         .encode(
             x=alt.X(
-                "year",
-                scale=alt.Scale(zero=False),
-                title="Year",
-                axis=alt.Axis(format="d"),
-            ),
-            y=alt.Y(
                 field="count",
                 aggregate="sum",
                 type="quantitative",
                 title="Number of deaths",
             ),
-            color=alt.Color(
-                "disease", title="Disease", scale=alt.Scale(scheme="cividis")
+            y=alt.Y(
+                "disease",
+                scale=alt.Scale(zero=False),
+                title="Disease",
+                sort=alt.SortField(
+                    field='count',
+                    order='descending'
+                )
             ),
-        )
+            color=alt.Color("disease", title="Disease"),
+        ).transform_window(
+            window=[{'op': 'rank', 'as': 'rank'}],
+            sort=[{'field': 'count', 'order': 'descending'}]
+        ).transform_filter('datum.rank <= 5')
         .configure_legend(orient="top")
     )
-    return year_chart.to_html()
+    return disease_chart.to_html()
 
 
 # Define map
@@ -266,10 +277,9 @@ def plot_disease(year_range, countries, diseases):
     Input("country_widget", "value"),
     Input("disease_widget", "value"),
 )
-def display_choropleth(year_range, countries, diseases):
+def display_choropleth(year, countries, diseases):
     df = disease_count_map_data[
-        (disease_count_data["year"] >= year_range[0])
-        & (disease_count_data["year"] <= year_range[1])
+        (disease_count_data["year"] == year)
         & (disease_count_data["disease"].isin(diseases))
     ]
     fig = px.choropleth(
@@ -280,8 +290,8 @@ def display_choropleth(year_range, countries, diseases):
         color_continuous_scale=px.colors.sequential.Plasma,
     )
     fig.update_layout(
-        height=300,
-        width=300,
+        height=500,
+        width=500,
         geo_scope="africa",
         coloraxis_showscale=False,
         margin=dict(l=0, r=0, b=0, t=10),
