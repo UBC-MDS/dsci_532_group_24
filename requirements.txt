@@ -1,4 +1,4 @@
-python=3.9
+python==3.9.1
 pandas
 gunicorn
 altair
@@ -6,3 +6,4 @@ dash==1.18.1
 dash_bootstrap_components
 plotly==4.14.3
 nbformat
+pip
