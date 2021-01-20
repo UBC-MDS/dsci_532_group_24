@@ -128,6 +128,8 @@ disease_controller = html.Div(
 # Define app
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+server = app.server
+
 app.layout = dbc.Container(
     [
         html.H1("Causes of Child Mortality in Africa, since 1990"),
