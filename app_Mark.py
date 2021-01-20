@@ -190,32 +190,34 @@ app.layout = dbc.Container(
     Input("disease_widget", "value"),
 )
 def plot_country(year, countries, diseases):
+    country_count = disease_count_data[
+        (disease_count_data["year"] == year)
+        & (disease_count_data["country"].isin(countries))
+        & (disease_count_data["disease"].isin(diseases))
+    ].groupby(by='country').sum().reset_index()
+
     country_chart = (
         alt.Chart(
-            disease_count_data[
-                (disease_count_data["year"] == year)
-                & (disease_count_data["country"].isin(countries))
-                & (disease_count_data["disease"].isin(diseases))
-            ]
+            country_count
         )
         .mark_bar()
         .encode(
             x=alt.X(
                 field="count",
-                aggregate="sum",
                 type="quantitative",
                 title="Number of deaths",
             ),
             y=alt.Y(
-                "country",
+                field="country",
+                type="nominal",
                 scale=alt.Scale(zero=False),
                 title="Country",
-                sort=alt.SortField(
-                    field='count',
-                    order='descending'
-                )
+                sort='-x'
             ),
-            color=alt.Color("country", title="Country"),
+            color=alt.Color(
+                field="country",
+                type="nominal",
+                title="Country"),
         ).transform_window(
             window=[{'op': 'rank', 'as': 'rank'}],
             sort=[{'field': 'count', 'order': 'descending'}]
@@ -233,32 +235,34 @@ def plot_country(year, countries, diseases):
     Input("disease_widget", "value"),
 )
 def plot_disease(year, countries, diseases):
+    disease_count = disease_count_data[
+        (disease_count_data["year"] == year)
+        & (disease_count_data["country"].isin(countries))
+        & (disease_count_data["disease"].isin(diseases))
+    ].groupby(by='disease').sum().reset_index()
+
     disease_chart = (
         alt.Chart(
-            disease_count_data[
-                (disease_count_data["year"] >= year)
-                & (disease_count_data["country"].isin(countries))
-                & (disease_count_data["disease"].isin(diseases))
-            ]
+            disease_count
         )
         .mark_bar()
         .encode(
             x=alt.X(
                 field="count",
-                aggregate="sum",
                 type="quantitative",
                 title="Number of deaths",
             ),
             y=alt.Y(
-                "disease",
+                field="disease",
+                type="nominal",
                 scale=alt.Scale(zero=False),
                 title="Disease",
-                sort=alt.SortField(
-                    field='count',
-                    order='descending'
-                )
+                sort='-x'
             ),
-            color=alt.Color("disease", title="Disease"),
+            color=alt.Color(
+                field="disease",
+                type="nominal",
+                title="Disease"),
         ).transform_window(
             window=[{'op': 'rank', 'as': 'rank'}],
             sort=[{'field': 'count', 'order': 'descending'}]
