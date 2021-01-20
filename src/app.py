@@ -149,7 +149,7 @@ app.layout = dbc.Container(
                                 style={
                                     "border-width": "0",
                                     "width": "100%",
-                                    "height": "50vh",
+                                    "height": "60vh",
                                 },
                             )
                         ),
@@ -195,6 +195,7 @@ def plot_country(year, countries, diseases):
         & (disease_count_data["country"].isin(countries))
         & (disease_count_data["disease"].isin(diseases))
     ].groupby(by='country').sum().reset_index()
+    print(country_count)
 
     country_chart = (
         alt.Chart(
@@ -223,7 +224,11 @@ def plot_country(year, countries, diseases):
             sort=[{'field': 'count', 'order': 'descending'}]
         ).transform_filter('datum.rank <= 5')
         .configure_legend(orient="top")
-    )
+    ).properties(
+    width=350,
+    height=300
+    ).configure_axis(labelFontSize=15, titleFontSize=20
+        ).configure_legend(titleFontSize=14)
     return country_chart.to_html()
 
 
@@ -268,7 +273,12 @@ def plot_disease(year, countries, diseases):
             sort=[{'field': 'count', 'order': 'descending'}]
         ).transform_filter('datum.rank <= 5')
         .configure_legend(orient="top")
-    )
+        ).properties(
+        width=350,
+        height=300
+        ).configure_axis(labelFontSize=15, titleFontSize=20
+        ).configure_legend(titleFontSize=14)
+
     return disease_chart.to_html()
 
 
