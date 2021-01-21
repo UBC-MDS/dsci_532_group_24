@@ -84,7 +84,7 @@ year_controller = html.Div(
             id="year_widget",
             min=1990,
             max=2015,
-            value=2015,
+            value=2005,
             marks={
                 1990: "1990",
                 1995: "1995",
@@ -93,6 +93,7 @@ year_controller = html.Div(
                 2010: "2010",
                 2015: "2015",
             },
+            included=False,
         ),
     ]
 )
@@ -106,7 +107,7 @@ country_controller = html.Div(
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
-            style={ "overflow-y":"scroll", "height": "100px"}
+            style={"overflow-y": "scroll", "height": "100px"},
         ),
     ]
 )
@@ -120,7 +121,7 @@ disease_controller = html.Div(
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
-            style={ "overflow-y":"scroll", "height": "100px"}
+            style={"overflow-y": "scroll", "height": "100px"},
         ),
     ]
 )
@@ -180,7 +181,7 @@ app.layout = dbc.Container(
             ]
         ),
     ],
-    fluid = True
+    fluid=True,
 )
 
 # Define charts
@@ -192,55 +193,55 @@ app.layout = dbc.Container(
     Input("disease_widget", "value"),
 )
 def plot_country(year, countries, diseases):
-    country_count = disease_count_data[
-        (disease_count_data["year"] == year)
-        & (disease_count_data["country"].isin(countries))
-        & (disease_count_data["disease"].isin(diseases))
-    ].groupby(by='country').sum().reset_index()
+    country_count = (
+        disease_count_data[
+            (disease_count_data["year"] == year)
+            & (disease_count_data["country"].isin(countries))
+            & (disease_count_data["disease"].isin(diseases))
+        ]
+        .groupby(by="country")
+        .sum()
+        .reset_index()
+    )
 
     country_chart = (
-        alt.Chart(
-            country_count
-        )
-        .mark_bar()
-        .encode(
-            x=alt.X(
-                field="count",
-                type="quantitative",
-                title="Number of deaths",
-            ),
-            y=alt.Y(
-                field="country",
-                type="nominal",
-                scale=alt.Scale(zero=False),
-                title="Country",
-                sort='-x'
-            ),
-            color=alt.Color(
-                field="country",
-                type="nominal",
-                title="Country",
-                sort='-x'
-            ),
-            tooltip=alt.Tooltip(
-                field="count",
-                type="quantitative",
-                title="Number of deaths",
+        (
+            alt.Chart(country_count)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    field="count",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
+                y=alt.Y(
+                    field="country",
+                    type="nominal",
+                    scale=alt.Scale(zero=False),
+                    title="Country",
+                    sort="-x",
+                ),
+                color=alt.Color(
+                    field="country", type="nominal", title="Country", sort="-x"
+                ),
+                tooltip=alt.Tooltip(
+                    field="count",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
             )
-
-        ).transform_window(
-            window=[{'op': 'rank', 'as': 'rank'}],
-            sort=[{'field': 'count', 'order': 'descending'}]
-        ).transform_filter('datum.rank <= 5')
-        .configure_legend(orient="top")
-    ).properties(
-    width=350,
-    height=300
-    ).configure_axis(
-        labelFontSize=15, titleFontSize=20
-    ).configure_legend(
-        titleFontSize=14
-    ).interactive()
+            .transform_window(
+                window=[{"op": "rank", "as": "rank"}],
+                sort=[{"field": "count", "order": "descending"}],
+            )
+            .transform_filter("datum.rank <= 5")
+            .configure_legend(orient="top")
+        )
+        .properties(width=350, height=300)
+        .configure_axis(labelFontSize=15, titleFontSize=20)
+        .configure_legend(titleFontSize=14)
+        .interactive()
+    )
     return country_chart.to_html()
 
 
@@ -252,54 +253,53 @@ def plot_country(year, countries, diseases):
     Input("disease_widget", "value"),
 )
 def plot_disease(year, countries, diseases):
-    disease_count = disease_count_data[
-        (disease_count_data["year"] == year)
-        & (disease_count_data["country"].isin(countries))
-        & (disease_count_data["disease"].isin(diseases))
-    ].groupby(by='disease').sum().reset_index()
+    disease_count = (
+        disease_count_data[
+            (disease_count_data["year"] == year)
+            & (disease_count_data["country"].isin(countries))
+            & (disease_count_data["disease"].isin(diseases))
+        ]
+        .groupby(by="disease")
+        .sum()
+        .reset_index()
+    )
 
     disease_chart = (
-        alt.Chart(
-            disease_count
-        )
-        .mark_bar()
-        .encode(
-            x=alt.X(
-                field="count",
-                type="quantitative",
-                title="Number of deaths",
-            ),
-            y=alt.Y(
-                field="disease",
-                type="nominal",
-                scale=alt.Scale(zero=False),
-                title="Disease",
-                sort='-x'
-            ),
-            color=alt.Color(
-                field="disease",
-                type="nominal",
-                title="Disease",
-                sort='-x'
-            ),
-            tooltip=alt.Tooltip(
-                field="count",
-                type="quantitative",
-                title="Number of deaths"
+        (
+            alt.Chart(disease_count)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    field="count",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
+                y=alt.Y(
+                    field="disease",
+                    type="nominal",
+                    scale=alt.Scale(zero=False),
+                    title="Disease",
+                    sort="-x",
+                ),
+                color=alt.Color(
+                    field="disease", type="nominal", title="Disease", sort="-x"
+                ),
+                tooltip=alt.Tooltip(
+                    field="count", type="quantitative", title="Number of deaths"
+                ),
             )
-        ).transform_window(
-            window=[{'op': 'rank', 'as': 'rank'}],
-            sort=[{'field': 'count', 'order': 'descending'}]
-        ).transform_filter('datum.rank <= 5')
-        .configure_legend(orient="top")
-        ).properties(
-        width=350,
-        height=300
-        ).configure_axis(
-            labelFontSize=15, titleFontSize=20
-        ).configure_legend(
-            titleFontSize=14
-        ).interactive()
+            .transform_window(
+                window=[{"op": "rank", "as": "rank"}],
+                sort=[{"field": "count", "order": "descending"}],
+            )
+            .transform_filter("datum.rank <= 5")
+            .configure_legend(orient="top")
+        )
+        .properties(width=350, height=300)
+        .configure_axis(labelFontSize=15, titleFontSize=20)
+        .configure_legend(titleFontSize=14)
+        .interactive()
+    )
 
     return disease_chart.to_html()
 
@@ -314,15 +314,21 @@ def plot_disease(year, countries, diseases):
     Input("disease_widget", "value"),
 )
 def display_choropleth(year, countries, diseases):
-    df = disease_count_map_data[
-        (disease_count_data["year"] == year)
-        & (disease_count_data["disease"].isin(diseases))
-    ]
+    df = (
+        disease_count_map_data[
+            (disease_count_data["year"] == year)
+            & (disease_count_data["disease"].isin(diseases))
+        ]
+        .groupby(["country", "iso_alpha"])
+        .agg(total_deaths=pd.NamedAgg(column="count", aggfunc="sum"))
+        .reset_index()
+    )
     fig = px.choropleth(
         df,
         locations="iso_alpha",
-        color="count",
+        color="total_deaths",
         hover_name="country",
+        hover_data={"iso_alpha": False, "total_deaths": ":.0f"},
         color_continuous_scale=px.colors.sequential.Plasma,
     )
     fig.update_layout(
