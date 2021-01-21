@@ -61,5 +61,5 @@ merged_data = merged_data.loc[
 merged_data = merged_data.drop("child_mortality", axis=1)
 
 # Export clean data
-merged_data.to_pickle("data/clean_data.pkl")
+merged_data.to_pickle("data/clean_data.pkl", protocol=4)
 merged_data.to_csv("data/clean_data.csv")

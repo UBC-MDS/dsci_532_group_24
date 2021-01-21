@@ -128,6 +128,8 @@ disease_controller = html.Div(
 # Define app
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+server = app.server
+
 app.layout = dbc.Container(
     [
         html.H1("Causes of Child Mortality in Africa, since 1990"),
@@ -195,7 +197,6 @@ def plot_country(year, countries, diseases):
         & (disease_count_data["country"].isin(countries))
         & (disease_count_data["disease"].isin(diseases))
     ].groupby(by='country').sum().reset_index()
-    print(country_count)
 
     country_chart = (
         alt.Chart(
@@ -218,7 +219,15 @@ def plot_country(year, countries, diseases):
             color=alt.Color(
                 field="country",
                 type="nominal",
-                title="Country"),
+                title="Country",
+                sort='-x'
+            ),
+            tooltip=alt.Tooltip(
+                field="count",
+                type="quantitative",
+                title="Number of deaths",
+            )
+
         ).transform_window(
             window=[{'op': 'rank', 'as': 'rank'}],
             sort=[{'field': 'count', 'order': 'descending'}]
@@ -227,8 +236,11 @@ def plot_country(year, countries, diseases):
     ).properties(
     width=350,
     height=300
-    ).configure_axis(labelFontSize=15, titleFontSize=20
-        ).configure_legend(titleFontSize=14)
+    ).configure_axis(
+        labelFontSize=15, titleFontSize=20
+    ).configure_legend(
+        titleFontSize=14
+    ).interactive()
     return country_chart.to_html()
 
 
@@ -267,7 +279,14 @@ def plot_disease(year, countries, diseases):
             color=alt.Color(
                 field="disease",
                 type="nominal",
-                title="Disease"),
+                title="Disease",
+                sort='-x'
+            ),
+            tooltip=alt.Tooltip(
+                field="count",
+                type="quantitative",
+                title="Number of deaths"
+            )
         ).transform_window(
             window=[{'op': 'rank', 'as': 'rank'}],
             sort=[{'field': 'count', 'order': 'descending'}]
@@ -276,8 +295,11 @@ def plot_disease(year, countries, diseases):
         ).properties(
         width=350,
         height=300
-        ).configure_axis(labelFontSize=15, titleFontSize=20
-        ).configure_legend(titleFontSize=14)
+        ).configure_axis(
+            labelFontSize=15, titleFontSize=20
+        ).configure_legend(
+            titleFontSize=14
+        ).interactive()
 
     return disease_chart.to_html()
 
