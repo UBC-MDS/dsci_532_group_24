@@ -1,0 +1,10 @@
+## Reflection
+
+Our group has finished the majority part of our app, and it contains all the functions we listed on the Description of app & sketch part on our milestone#1. In our app, there are three plots in total, 2 bar charts and a map. By controlling the slider of the year, the two bar chars can show the number of mortalities of top five countries and top five diseases of the given year, respectively. The map would show the total mortality of each country by the given year (distinguished by color). If someone hovered over a country on the map, they would see the name of the country and total mortality.  User can select the countries and diseases they interested in on tow drop-down menus. The tow bar charts would change accordingly to show the information user would like to see. Our app looks simple and quite easy to use but informative. Based on our app, users can see the mortality caused by different diseases in different countries over 26 years.
+
+However, there are still some functions we plan to add in the following weeks after group meeting and reviewing TA feedback. 
+- We need to add a legend for our map. Currently, the color of the map is confusing. Users have no idea about the relationship of the color scales and the number of the mortality.
+- Add the border on our map.
+- We found it is a good idea to add the tendency plots on our app to show how the mortality changed over time. Hence, we plan to add two line-plots, one for mortality of each country over years, the other for the change of mortality caused by diseases over years. Users could choose the range of years, multiple countries, and diseases they are interested.
+- We also trying to add stacked bar charts to show all diseases as a proportion in each single country bar, and proportion of top five countries in each single disease bar, to help users do comparisons quickly.
+- Currently, our map can only interact with the years. We need to add a function to connect the country drop-down menu with the map.
