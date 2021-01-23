@@ -20,7 +20,6 @@ disease_list = [
     "Measles",
     "Meningitis",
     "NCD",
-    "Total deaths",
 ]
 
 ## Define new dataset to present disease
@@ -34,7 +33,6 @@ disease_count_data = clean_data[
         "measles_deaths_in_children_1_59_months_total_deaths",
         "meningitis_deaths_in_children_1_59_months_total_deaths",
         "ncd_deaths_in_children_1_59_months_total_deaths",
-        "number_of_child_deaths",
     ]
 ]
 
@@ -47,7 +45,6 @@ disease_count_data.columns = [
     "Measles",
     "Meningitis",
     "NCD",
-    "Total",
 ]
 
 disease_count_data = pd.melt(
@@ -126,6 +123,58 @@ disease_controller = html.Div(
     ]
 )
 
+# Define information tab
+table_header = [html.Thead(html.Tr([html.Th("Variable"), html.Th("Source")]))]
+
+row1 = html.Tr(
+    [
+        html.Td("The total number of children dying before age 5"),
+        html.Td(
+            html.A(
+                "World Health Organization",
+                href="https://www.who.int/data/maternal-newborn-child-adolescent-ageing/child-data",
+            )
+        ),
+    ]
+)
+row2 = html.Tr(
+    [
+        html.Td(
+            "HIV, malaria, measles, meningitis and NCD (non-communicable disease) deaths in children 1-59 months"
+        ),
+        html.Td(
+            html.A(
+                "World Health Organization",
+                href="https://www.who.int/data/maternal-newborn-child-adolescent-ageing/child-data",
+            )
+        ),
+    ]
+)
+row3 = html.Tr(
+    [
+        html.Td("Total Population by country"),
+        html.Td(
+            html.A(
+                "The United Nations, 2019 Revision of World Population Prospects",
+                href="https://population.un.org/wpp/",
+            )
+        ),
+    ]
+)
+
+table_body = [html.Tbody([row1, row2, row3])]
+
+information_tab = [
+    html.P(
+        """
+        This app is developed as part of DSCI 532's coursework. We intend to provide information to staff and volunteers at an international charity whose work focuses on healthcare and medication to children in Africa.
+        The underlying dataset of this app is obtained from Gapminder, an independent Swedish foundation, with a mission to fight misconceptions and promotes a fact-based worldview.
+        The table below summarizes the key data sources used in the app. 
+        """
+    ),
+    dbc.Table(table_header + table_body, bordered=True),
+]
+
 # Define app
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -133,53 +182,71 @@ server = app.server
 
 app.layout = dbc.Container(
     [
-        html.H1("Causes of Child Mortality in Africa, since 1990"),
-        html.P("App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"),
-        dbc.Col(
+        dbc.Tabs(
             [
-                dbc.Row(
+                dbc.Tab(
                     [
-                        dbc.Col(country_controller),
-                        dbc.Col(year_controller),
-                        dbc.Col(disease_controller),
-                    ]
+                        html.H1("Causes of Child Mortality in Africa, since 1990"),
+                        html.P(
+                            "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
+                        ),
+                        dbc.Col(
+                            [
+                                dbc.Row(
+                                    [
+                                        dbc.Col(country_controller),
+                                        dbc.Col(year_controller),
+                                        dbc.Col(disease_controller),
+                                    ]
+                                ),
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            [
+                                                "Top Countries (Default Five) by Number of Deaths",
+                                                html.Iframe(
+                                                    id="country_chart",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "50vh",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                        dbc.Col(
+                                            dcc.Graph(
+                                                id="map",
+                                                style={
+                                                    "border-width": "0",
+                                                    "width": "100%",
+                                                    "height": "50vh",
+                                                },
+                                            )
+                                        ),
+                                        dbc.Col(
+                                            [
+                                                "Diseases by Number of Deaths",
+                                                html.Iframe(
+                                                    id="disease_chart",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "50vh",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+                    ],
+                    label="Visualization",
                 ),
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            html.Iframe(
-                                id="country_chart",
-                                style={
-                                    "border-width": "0",
-                                    "width": "100%",
-                                    "height": "60vh",
-                                },
-                            )
-                        ),
-                        dbc.Col(
-                            dcc.Graph(
-                                id="map",
-                                style={
-                                    "border-width": "0",
-                                    "width": "100%",
-                                    "height": "50vh",
-                                },
-                            )
-                        ),
-                        dbc.Col(
-                            html.Iframe(
-                                id="disease_chart",
-                                style={
-                                    "border-width": "0",
-                                    "width": "100%",
-                                    "height": "50vh",
-                                },
-                            )
-                        ),
-                    ]
-                ),
+                dbc.Tab(information_tab, label="Data Source and Explanation"),
             ]
-        ),
+        )
     ],
     fluid=True,
 )
@@ -222,7 +289,11 @@ def plot_country(year, countries, diseases):
                     sort="-x",
                 ),
                 color=alt.Color(
-                    field="country", type="nominal", title="Country", sort="-x"
+                    field="country",
+                    type="nominal",
+                    title="Country",
+                    sort="-x",
+                    legend=None,
                 ),
                 tooltip=alt.Tooltip(
                     field="count",
@@ -235,11 +306,9 @@ def plot_country(year, countries, diseases):
                 sort=[{"field": "count", "order": "descending"}],
             )
             .transform_filter("datum.rank <= 5")
-            .configure_legend(orient="top")
         )
         .properties(width=350, height=300)
         .configure_axis(labelFontSize=15, titleFontSize=20)
-        .configure_legend(titleFontSize=14)
         .interactive()
     )
     return country_chart.to_html()
@@ -282,7 +351,11 @@ def plot_disease(year, countries, diseases):
                     sort="-x",
                 ),
                 color=alt.Color(
-                    field="disease", type="nominal", title="Disease", sort="-x"
+                    field="disease",
+                    type="nominal",
+                    title="Disease",
+                    sort="-x",
+                    legend=None,
                 ),
                 tooltip=alt.Tooltip(
                     field="count", type="quantitative", title="Number of deaths"
@@ -293,11 +366,9 @@ def plot_disease(year, countries, diseases):
                 sort=[{"field": "count", "order": "descending"}],
             )
             .transform_filter("datum.rank <= 5")
-            .configure_legend(orient="top")
         )
         .properties(width=350, height=300)
         .configure_axis(labelFontSize=15, titleFontSize=20)
-        .configure_legend(titleFontSize=14)
         .interactive()
     )
 
