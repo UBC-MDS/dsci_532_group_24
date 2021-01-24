@@ -10,6 +10,7 @@ This document is to provide a brief overview about our project. Please feel free
 - [Description of app](#description-of-app)
 - [Initial app sketch](#initial-app-sketch)
 - [Dashboard in action](#dashboard-in-action)
+- [Link to deployed app](#link-to-deployed-app)
 - [Get involved](#get-involved)
 
 ## Motivation
@@ -42,6 +43,10 @@ The interactive and visual components of the app are entangled with each other i
 
 ## Dashboard in action
 ![App animation](app.gif)
+
+## Link to deployed app
+
+We hope we caught your interest by now! Please check out the [latest version](https://african-children-health-app.herokuapp.com/) of our app, courtesy of Heroku.
 
 ## Get involved
 If you would like to help us improve our app, please check our [contributors' guidelines](CONTRIBUTING.md) !
