@@ -388,6 +388,7 @@ def display_choropleth(year, countries, diseases):
     df = (
         disease_count_map_data[
             (disease_count_data["year"] == year)
+            & (disease_count_data["country"].isin(countries))
             & (disease_count_data["disease"].isin(diseases))
         ]
         .groupby(["country", "iso_alpha"])
@@ -406,8 +407,14 @@ def display_choropleth(year, countries, diseases):
         height=500,
         width=500,
         geo_scope="africa",
-        coloraxis_showscale=False,
         margin=dict(l=0, r=0, b=0, t=10),
+        coloraxis_colorbar=dict(
+            title="Total deaths",
+            thicknessmode="pixels",
+            thickness=20,
+            lenmode="pixels",
+            len=300,
+        ),
     )
     return fig
 
