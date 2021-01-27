@@ -1,6 +1,6 @@
 # dsci_532_group_24 
 
-# Care for African kids
+# Care for African Kids
 
 ## Welcome!
 
