@@ -94,6 +94,27 @@ disease_controller = html.Div(
     ]
 )
 
+# Define default number selector
+default_number_selector = html.Div(
+    [
+        html.Div(
+            [
+                html.H6(
+                    """Select number of countries to show""",
+                    style={"margin-right": "1em"},
+                )
+            ],
+        ),
+        dcc.Dropdown(
+            id="default_number_widget",
+            options=[{"label": str(n), "value": n} for n in range(3, 11)],
+            value=5,
+            style=dict(width="40%", verticalAlign="middle"),
+        ),
+    ],
+    style=dict(display="flex"),
+)
+
 # Define information tab
 table_header = [html.Thead(html.Tr([html.Th("Variable"), html.Th("Source")]))]
 
@@ -175,7 +196,7 @@ app.layout = dbc.Container(
                                     [
                                         dbc.Col(
                                             [
-                                                "Top Countries (Default Five)",
+                                                default_number_selector,
                                                 html.Iframe(
                                                     id="country_chart",
                                                     style={
@@ -232,8 +253,10 @@ app.layout = dbc.Container(
     Input("country_widget", "value"),
     Input("disease_widget", "value"),
     Input("stat_type_widget", "value"),
+    Input("default_number_widget", "value"),
 )
-def plot_country(year, countries, diseases, stat_type):
+def plot_country(year, countries, diseases, stat_type, number_default_countries):
+    print(number_default_countries)
     if stat_type == "raw_stats":
         country_count = (
             disease_count_data[
@@ -282,7 +305,7 @@ def plot_country(year, countries, diseases, stat_type):
                     window=[{"op": "rank", "as": "rank"}],
                     sort=[{"field": "count", "order": "descending"}],
                 )
-                .transform_filter("datum.rank <= 5")
+                .transform_filter("datum.rank <= " + str(number_default_countries))
             )
             .properties(width=350, height=300)
             .configure_axis(labelFontSize=15, titleFontSize=20)
@@ -342,7 +365,7 @@ def plot_country(year, countries, diseases, stat_type):
                     window=[{"op": "rank", "as": "rank"}],
                     sort=[{"field": "count_pkc", "order": "descending"}],
                 )
-                .transform_filter("datum.rank <= 5")
+                .transform_filter("datum.rank <= " + str(number_default_countries))
             )
             .properties(width=350, height=300)
             .configure_axis(labelFontSize=15, titleFontSize=20)
