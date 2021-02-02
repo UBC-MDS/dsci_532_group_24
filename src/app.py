@@ -244,7 +244,8 @@ def plot_country(year, countries, diseases, stat_type):
             .sum()
             .reset_index()
         )
-
+        min_count = list(country_count["count"].sort_values(ascending=False))[-1]
+        max_count = list(country_count["count"].sort_values(ascending=False))[0]
         country_chart = (
             (
                 alt.Chart(country_count)
@@ -263,11 +264,12 @@ def plot_country(year, countries, diseases, stat_type):
                         title="",
                     ),
                     color=alt.Color(
-                        field="country",
-                        type="nominal",
-                        title="Country",
+                        field="count",
+                        type="quantitative",
+                        title="Count",
                         sort="-x",
                         legend=None,
+                        scale=alt.Scale(scheme="plasma", domain=[min_count, max_count]),
                     ),
                     tooltip=alt.Tooltip(
                         field="count",
