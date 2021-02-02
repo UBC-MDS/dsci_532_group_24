@@ -94,6 +94,54 @@ disease_controller = html.Div(
     ]
 )
 
+year_range_controller = html.Div(
+    [
+        "Year",
+        dcc.RangeSlider(
+            id="year_range_widget",
+            min=1990,
+            max=2015,
+            value=[2000, 2010],
+            marks={
+                1990: "1990",
+                1995: "1995",
+                2000: "2000",
+                2005: "2005",
+                2010: "2010",
+                2015: "2015",
+            },
+        ),
+    ]
+)
+
+country5_controller = html.Div(
+    [
+        "Country",
+        dcc.Dropdown(
+            id="country5_widget",
+            value=country_list[0 :5],
+            placeholder="Select a country...",
+            options=[{"label": country, "value": country} for country in country_list],
+            multi=True,
+            style={"overflow-y": "scroll", "height": "100px"},
+        ),
+    ]
+)
+
+disease_line_controller = html.Div(
+    [
+        "Disease",
+        dcc.Dropdown(
+            id="disease_line_widget",
+            value=disease_list,
+            placeholder="Select a disease...",
+            options=[{"label": disease, "value": disease} for disease in disease_list],
+            multi=True,
+            style={"overflow-y": "scroll", "height": "100px"},
+        ),
+    ]
+)
+
 # Define information tab
 table_header = [html.Thead(html.Tr([html.Th("Variable"), html.Th("Source")]))]
 
@@ -155,7 +203,47 @@ app.layout = dbc.Container(
     [
         dbc.Tabs(
             [
-                dbc.Tab(label="Trend"),
+                dbc.Tab(
+                    [
+                        html.H1("Tendency"),
+                        html.P("App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"),
+                        dbc.Col(
+                            [
+                                dbc.Row(
+                                    [
+                                        dbc.Col(country5_controller),
+                                        dbc.Col(year_range_controller),
+                                        dbc.Col(disease_line_controller),
+                                    ]
+                                ),
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            html.Iframe(
+                                                id="country_line",
+                                                style={
+                                                    "border-width": "0",
+                                                    "width": "100%",
+                                                    "height": "50vh",
+                                                },
+                                            )
+                                        ),
+                                        dbc.Col(
+                                            html.Iframe(
+                                                id="disease_line",
+                                                style={
+                                                    "border-width": "0",
+                                                    "width": "100%",
+                                                    "height": "50vh",
+                                                },
+                                            )
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        )
+                    ],
+                    label="Trend"),
                 dbc.Tab(
                     [
                         html.H1("Causes of Child Mortality in Africa, 1990 - 2015"),
@@ -451,6 +539,83 @@ def plot_disease(year, countries, diseases, stat_type):
             .interactive()
         )
     return disease_chart.to_html()
+
+## Line chart by country
+@app.callback(
+    Output("country_line", "srcDoc"),
+    Input("year_range_widget", "value"),
+    Input("country5_widget", "value"),
+    Input("disease_line_widget", "value"),
+)
+def plot_country(year_range, countries, diseases):
+    year_chart = (
+        alt.Chart(
+            disease_count_data[
+                (disease_count_data["year"] >= year_range[0])
+                & (disease_count_data["year"] <= year_range[1])
+                & (disease_count_data["country"].isin(countries))
+                & (disease_count_data["disease"].isin(diseases))
+            ]
+        )
+        .mark_line()
+        .encode(
+            x=alt.X(
+                "year",
+                scale=alt.Scale(zero=False),
+                title="Year",
+                axis=alt.Axis(format="d"),
+            ),
+            y=alt.Y(
+                field="count",
+                aggregate="sum",
+                type="quantitative",
+                title="Number of deaths",
+            ),
+            color=alt.Color("country", title="Country"),
+        )
+        .configure_legend(orient="top")
+    )
+    return year_chart.to_html()
+
+
+## Line chart by disease
+@app.callback(
+    Output("disease_line", "srcDoc"),
+    Input("year_range_widget", "value"),
+    Input("country5_widget", "value"),
+    Input("disease_line_widget", "value"),
+)
+def plot_disease(year_range, countries, diseases):
+    year_chart = (
+        alt.Chart(
+            disease_count_data[
+                (disease_count_data["year"] >= year_range[0])
+                & (disease_count_data["year"] <= year_range[1])
+                & (disease_count_data["country"].isin(countries))
+                & (disease_count_data["disease"].isin(diseases))
+            ]
+        )
+        .mark_line()
+        .encode(
+            x=alt.X(
+                "year",
+                scale=alt.Scale(zero=False),
+                title="Year",
+                axis=alt.Axis(format="d"),
+            ),
+            y=alt.Y(
+                field="count",
+                aggregate="sum",
+                type="quantitative",
+                title="Number of deaths",
+            ),
+            color=alt.Color(
+                "disease", title="Disease", scale=alt.Scale(scheme="cividis")
+            ),
+        )
+        .configure_legend(orient="top")
+    )
+    return year_chart.to_html()
 
 
 # Define map
