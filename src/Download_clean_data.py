@@ -105,6 +105,7 @@ pc_data.columns = ["country", "year", "ncu5"]
 disease_count_data_pc = pd.merge(
     disease_count_data, pc_data, on=["country", "year"], how="left"
 )
+
 disease_count_data_pc["count_pkc"] = (
     1000 * disease_count_data_pc["count"] / disease_count_data_pc["ncu5"]
 )
@@ -128,6 +129,10 @@ disease_count_map_data = pd.DataFrame.merge(
     disease_count_data, country_iso, on="country", how="left"
 )
 
+disease_count_map_data_pc = pd.merge(
+    disease_count_data_pc, country_iso, on="country", how="left"
+)
+
 # Export pre-processed datasets
 clean_data.to_pickle("data/clean_data.pkl", protocol=4)
 clean_data.to_csv("data/clean_data.csv")
@@ -140,3 +145,6 @@ disease_count_data_pc.to_csv("data/disease_count_data_pc.csv")
 
 disease_count_map_data.to_pickle("data/disease_count_map_data.pkl", protocol=4)
 disease_count_map_data.to_csv("data/disease_count_map_data.csv")
+
+disease_count_map_data_pc.to_pickle("data/disease_count_map_data_pc.pkl", protocol=4)
+disease_count_map_data_pc.to_csv("data/disease_count_map_data_pc.csv")

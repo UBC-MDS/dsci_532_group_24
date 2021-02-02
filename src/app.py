@@ -16,6 +16,7 @@ clean_data = pd.read_pickle("data/clean_data.pkl")
 disease_count_data = pd.read_pickle("data/disease_count_data.pkl")
 disease_count_data_pc = pd.read_pickle("data/disease_count_data_pc.pkl")
 disease_count_map_data = pd.read_pickle("data/disease_count_map_data.pkl")
+disease_count_map_data_pc = pd.read_pickle("data/disease_count_map_data_pc.pkl")
 
 ## Make country and disease lists
 country_list = list(clean_data["country"].unique())
@@ -448,39 +449,73 @@ def plot_disease(year, countries, diseases, stat_type):
     Input("year_widget", "value"),
     Input("country_widget", "value"),
     Input("disease_widget", "value"),
+    Input("stat_type_widget", "value"),
 )
-def display_choropleth(year, countries, diseases):
-    df = (
-        disease_count_map_data[
-            (disease_count_data["year"] == year)
-            & (disease_count_data["country"].isin(countries))
-            & (disease_count_data["disease"].isin(diseases))
-        ]
-        .groupby(["country", "iso_alpha"])
-        .agg(total_deaths=pd.NamedAgg(column="count", aggfunc="sum"))
-        .reset_index()
-    )
-    fig = px.choropleth(
-        df,
-        locations="iso_alpha",
-        color="total_deaths",
-        hover_name="country",
-        hover_data={"iso_alpha": False, "total_deaths": ":.0f"},
-        color_continuous_scale=px.colors.sequential.Plasma,
-    )
-    fig.update_layout(
-        height=500,
-        width=500,
-        geo_scope="africa",
-        margin=dict(l=0, r=0, b=0, t=10),
-        coloraxis_colorbar=dict(
-            title="Total deaths",
-            thicknessmode="pixels",
-            thickness=20,
-            lenmode="pixels",
-            len=300,
-        ),
-    )
+def display_choropleth(year, countries, diseases, stat_type):
+    if stat_type == "raw_stats":
+        df = (
+            disease_count_map_data[
+                (disease_count_data["year"] == year)
+                & (disease_count_data["country"].isin(countries))
+                & (disease_count_data["disease"].isin(diseases))
+            ]
+            .groupby(["country", "iso_alpha"])
+            .agg(total_deaths=pd.NamedAgg(column="count", aggfunc="sum"))
+            .reset_index()
+        )
+        fig = px.choropleth(
+            df,
+            locations="iso_alpha",
+            color="total_deaths",
+            hover_name="country",
+            hover_data={"iso_alpha": False, "total_deaths": ":.0f"},
+            color_continuous_scale=px.colors.sequential.Plasma,
+        )
+        fig.update_layout(
+            height=500,
+            width=500,
+            geo_scope="africa",
+            margin=dict(l=0, r=0, b=0, t=10),
+            coloraxis_colorbar=dict(
+                title="Total deaths",
+                thicknessmode="pixels",
+                thickness=20,
+                lenmode="pixels",
+                len=300,
+            ),
+        )
+    else:
+        df_pc = (
+            disease_count_map_data_pc[
+                (disease_count_data["year"] == year)
+                & (disease_count_data["country"].isin(countries))
+                & (disease_count_data["disease"].isin(diseases))
+            ]
+            .groupby(["country", "iso_alpha"])
+            .agg(deaths_pkc=pd.NamedAgg(column="count_pkc", aggfunc="sum"))
+            .reset_index()
+        )
+        fig = px.choropleth(
+            df_pc,
+            locations="iso_alpha",
+            color="deaths_pkc",
+            hover_name="country",
+            hover_data={"iso_alpha": False, "deaths_pkc": ":.2f"},
+            color_continuous_scale=px.colors.sequential.Plasma,
+        )
+        fig.update_layout(
+            height=500,
+            width=500,
+            geo_scope="africa",
+            margin=dict(l=0, r=0, b=0, t=10),
+            coloraxis_colorbar=dict(
+                title="Deaths per 1,000<br>0-4-year-olds",
+                thicknessmode="pixels",
+                thickness=20,
+                lenmode="pixels",
+                len=300,
+            ),
+        )
     return fig
 
 
