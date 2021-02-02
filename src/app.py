@@ -298,6 +298,12 @@ def plot_country(year, countries, diseases, stat_type):
             .sum()
             .reset_index()
         )
+        min_count_pc = list(country_count_pc["count_pkc"].sort_values(ascending=False))[
+            -1
+        ]
+        max_count_pc = list(country_count_pc["count_pkc"].sort_values(ascending=False))[
+            0
+        ]
         country_chart = (
             (
                 alt.Chart(country_count_pc)
@@ -316,11 +322,14 @@ def plot_country(year, countries, diseases, stat_type):
                         title="",
                     ),
                     color=alt.Color(
-                        field="country",
-                        type="nominal",
-                        title="Country",
+                        field="count_pkc",
+                        type="quantitative",
+                        title="Count per thousand",
                         sort="-x",
                         legend=None,
+                        scale=alt.Scale(
+                            scheme="plasma", domain=[min_count_pc, max_count_pc]
+                        ),
                     ),
                     tooltip=alt.Tooltip(
                         field="count_pkc",
