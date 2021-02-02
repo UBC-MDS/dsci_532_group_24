@@ -105,8 +105,8 @@ pc_data.columns = ["country", "year", "ncu5"]
 disease_count_data_pc = pd.merge(
     disease_count_data, pc_data, on=["country", "year"], how="left"
 )
-disease_count_data_pc["count_pc"] = (
-    disease_count_data_pc["count"] / disease_count_data_pc["ncu5"]
+disease_count_data_pc["count_pkc"] = (
+    1000 * disease_count_data_pc["count"] / disease_count_data_pc["ncu5"]
 )
 
 ## Define map data

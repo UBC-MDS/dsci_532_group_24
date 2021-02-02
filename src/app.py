@@ -27,6 +27,22 @@ disease_list = [
     "NCD",
 ]
 
+# Define radio selector for statistic type
+stat_type_controller = html.Div(
+    [
+        "Statistic type",
+        dcc.RadioItems(
+            id="stat_type_widget",
+            options=[
+                {"label": "Raw number of deaths", "value": "raw_stats"},
+                {"label": "Deaths per thousand 0-4 year-olds", "value": "pc_k"},
+            ],
+            value="raw_stats",
+            labelStyle={"display": "block"},
+        ),
+    ]
+)
+
 # Define three controllers
 year_controller = html.Div(
     [
@@ -140,7 +156,7 @@ app.layout = dbc.Container(
             [
                 dbc.Tab(
                     [
-                        html.H1("Causes of Child Mortality in Africa, since 1990"),
+                        html.H1("Causes of Child Mortality in Africa, 1990 - 2015"),
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
                         ),
@@ -157,7 +173,7 @@ app.layout = dbc.Container(
                                     [
                                         dbc.Col(
                                             [
-                                                "Top Countries (Default Five) by Number of Deaths",
+                                                "Top Countries (Default Five)",
                                                 html.Iframe(
                                                     id="country_chart",
                                                     style={
@@ -193,6 +209,7 @@ app.layout = dbc.Container(
                                         ),
                                     ]
                                 ),
+                                dbc.Row([stat_type_controller]),
                             ]
                         ),
                     ],
@@ -212,59 +229,110 @@ app.layout = dbc.Container(
     Input("year_widget", "value"),
     Input("country_widget", "value"),
     Input("disease_widget", "value"),
+    Input("stat_type_widget", "value"),
 )
-def plot_country(year, countries, diseases):
-    country_count = (
-        disease_count_data[
-            (disease_count_data["year"] == year)
-            & (disease_count_data["country"].isin(countries))
-            & (disease_count_data["disease"].isin(diseases))
-        ]
-        .groupby(by="country")
-        .sum()
-        .reset_index()
-    )
-
-    country_chart = (
-        (
-            alt.Chart(country_count)
-            .mark_bar()
-            .encode(
-                x=alt.X(
-                    field="count",
-                    type="quantitative",
-                    title="Number of deaths",
-                ),
-                y=alt.Y(
-                    field="country",
-                    type="nominal",
-                    scale=alt.Scale(zero=False),
-                    title="Country",
-                    sort="-x",
-                ),
-                color=alt.Color(
-                    field="country",
-                    type="nominal",
-                    title="Country",
-                    sort="-x",
-                    legend=None,
-                ),
-                tooltip=alt.Tooltip(
-                    field="count",
-                    type="quantitative",
-                    title="Number of deaths",
-                ),
-            )
-            .transform_window(
-                window=[{"op": "rank", "as": "rank"}],
-                sort=[{"field": "count", "order": "descending"}],
-            )
-            .transform_filter("datum.rank <= 5")
+def plot_country(year, countries, diseases, stat_type):
+    if stat_type == "raw_stats":
+        country_count = (
+            disease_count_data[
+                (disease_count_data["year"] == year)
+                & (disease_count_data["country"].isin(countries))
+                & (disease_count_data["disease"].isin(diseases))
+            ]
+            .groupby(by="country")
+            .sum()
+            .reset_index()
         )
-        .properties(width=350, height=300)
-        .configure_axis(labelFontSize=15, titleFontSize=20)
-        .interactive()
-    )
+
+        country_chart = (
+            (
+                alt.Chart(country_count)
+                .mark_bar()
+                .encode(
+                    x=alt.X(
+                        field="count",
+                        type="quantitative",
+                        title="Number of deaths",
+                    ),
+                    y=alt.Y(
+                        field="country",
+                        type="nominal",
+                        scale=alt.Scale(zero=False),
+                        sort="-x",
+                    ),
+                    color=alt.Color(
+                        field="country",
+                        type="nominal",
+                        title="Country",
+                        sort="-x",
+                        legend=None,
+                    ),
+                    tooltip=alt.Tooltip(
+                        field="count",
+                        type="quantitative",
+                        title="Number of deaths",
+                    ),
+                )
+                .transform_window(
+                    window=[{"op": "rank", "as": "rank"}],
+                    sort=[{"field": "count", "order": "descending"}],
+                )
+                .transform_filter("datum.rank <= 5")
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .interactive()
+        )
+    else:
+        country_count_pc = (
+            disease_count_data_pc[
+                (disease_count_data_pc["year"] == year)
+                & (disease_count_data_pc["country"].isin(countries))
+                & (disease_count_data_pc["disease"].isin(diseases))
+            ]
+            .groupby(by="country")
+            .sum()
+            .reset_index()
+        )
+        country_chart = (
+            (
+                alt.Chart(country_count_pc)
+                .mark_bar()
+                .encode(
+                    x=alt.X(
+                        field="count_pkc",
+                        type="quantitative",
+                        title="Deaths per thousand 0-4-year-olds",
+                    ),
+                    y=alt.Y(
+                        field="country",
+                        type="nominal",
+                        scale=alt.Scale(zero=False),
+                        sort="-x",
+                    ),
+                    color=alt.Color(
+                        field="country",
+                        type="nominal",
+                        title="Country",
+                        sort="-x",
+                        legend=None,
+                    ),
+                    tooltip=alt.Tooltip(
+                        field="count",
+                        type="quantitative",
+                        title="Deaths per thousand 0-4-year-olds",
+                    ),
+                )
+                .transform_window(
+                    window=[{"op": "rank", "as": "rank"}],
+                    sort=[{"field": "count_pkc", "order": "descending"}],
+                )
+                .transform_filter("datum.rank <= 5")
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .interactive()
+        )
     return country_chart.to_html()
 
 
