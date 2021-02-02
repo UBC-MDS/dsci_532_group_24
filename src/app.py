@@ -13,6 +13,11 @@ import os
 
 # Import data
 clean_data = pd.read_pickle("data/clean_data.pkl")
+disease_count_data = pd.read_pickle("data/disease_count_data.pkl")
+disease_count_data_pc = pd.read_pickle("data/disease_count_data_pc.pkl")
+disease_count_map_data = pd.read_pickle("data/disease_count_map_data.pkl")
+
+## Make country and disease lists
 country_list = list(clean_data["country"].unique())
 disease_list = [
     "HIV",
@@ -21,57 +26,6 @@ disease_list = [
     "Meningitis",
     "NCD",
 ]
-
-## Define new dataset to present disease
-disease_count_data = clean_data[
-    [
-        "country",
-        "year",
-        "sub_region",
-        "hiv_deaths_in_children_1_59_months_total_deaths",
-        "malaria_deaths_in_children_1_59_months_total_deaths",
-        "measles_deaths_in_children_1_59_months_total_deaths",
-        "meningitis_deaths_in_children_1_59_months_total_deaths",
-        "ncd_deaths_in_children_1_59_months_total_deaths",
-    ]
-]
-
-disease_count_data.columns = [
-    "country",
-    "year",
-    "sub_region",
-    "HIV",
-    "Malaria",
-    "Measles",
-    "Meningitis",
-    "NCD",
-]
-
-disease_count_data = pd.melt(
-    disease_count_data,
-    id_vars=["country", "year", "sub_region"],
-    var_name="disease",
-    value_name="count",
-)
-
-## Define map data
-country_iso = (
-    px.data.gapminder()
-    .query("continent=='Africa'")[["country", "iso_alpha"]]
-    .drop_duplicates()
-    .reset_index(drop=True)
-)
-
-### Add South Sudan and Seychelles
-country_iso = country_iso.append(
-    pd.DataFrame(
-        {"country": ["South Sudan", "Seychelles"], "iso_alpha": ["SSD", "SYC"]}
-    )
-)
-
-disease_count_map_data = pd.DataFrame.merge(
-    disease_count_data, country_iso, on="country", how="left"
-)
 
 # Define three controllers
 year_controller = html.Div(
