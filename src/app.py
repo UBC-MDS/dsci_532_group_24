@@ -259,6 +259,7 @@ def plot_country(year, countries, diseases, stat_type):
                         type="nominal",
                         scale=alt.Scale(zero=False),
                         sort="-x",
+                        title="",
                     ),
                     color=alt.Color(
                         field="country",
@@ -309,6 +310,7 @@ def plot_country(year, countries, diseases, stat_type):
                         type="nominal",
                         scale=alt.Scale(zero=False),
                         sort="-x",
+                        title="",
                     ),
                     color=alt.Color(
                         field="country",
@@ -318,7 +320,7 @@ def plot_country(year, countries, diseases, stat_type):
                         legend=None,
                     ),
                     tooltip=alt.Tooltip(
-                        field="count",
+                        field="count_pkc",
                         type="quantitative",
                         title="Deaths per thousand 0-4-year-olds",
                     ),
@@ -342,58 +344,99 @@ def plot_country(year, countries, diseases, stat_type):
     Input("year_widget", "value"),
     Input("country_widget", "value"),
     Input("disease_widget", "value"),
+    Input("stat_type_widget", "value"),
 )
-def plot_disease(year, countries, diseases):
-    disease_count = (
-        disease_count_data[
-            (disease_count_data["year"] == year)
-            & (disease_count_data["country"].isin(countries))
-            & (disease_count_data["disease"].isin(diseases))
-        ]
-        .groupby(by="disease")
-        .sum()
-        .reset_index()
-    )
-
-    disease_chart = (
-        (
-            alt.Chart(disease_count)
-            .mark_bar()
-            .encode(
-                x=alt.X(
-                    field="count",
-                    type="quantitative",
-                    title="Number of deaths",
-                ),
-                y=alt.Y(
-                    field="disease",
-                    type="nominal",
-                    scale=alt.Scale(zero=False),
-                    title="Disease",
-                    sort="-x",
-                ),
-                color=alt.Color(
-                    field="disease",
-                    type="nominal",
-                    title="Disease",
-                    sort="-x",
-                    legend=None,
-                ),
-                tooltip=alt.Tooltip(
-                    field="count", type="quantitative", title="Number of deaths"
-                ),
-            )
-            .transform_window(
-                window=[{"op": "rank", "as": "rank"}],
-                sort=[{"field": "count", "order": "descending"}],
-            )
-            .transform_filter("datum.rank <= 5")
+def plot_disease(year, countries, diseases, stat_type):
+    if stat_type == "raw_stats":
+        disease_count = (
+            disease_count_data[
+                (disease_count_data["year"] == year)
+                & (disease_count_data["country"].isin(countries))
+                & (disease_count_data["disease"].isin(diseases))
+            ]
+            .groupby(by="disease")
+            .sum()
+            .reset_index()
         )
-        .properties(width=350, height=300)
-        .configure_axis(labelFontSize=15, titleFontSize=20)
-        .interactive()
-    )
 
+        disease_chart = (
+            (
+                alt.Chart(disease_count)
+                .mark_bar()
+                .encode(
+                    x=alt.X(
+                        field="count",
+                        type="quantitative",
+                        title="Number of deaths",
+                    ),
+                    y=alt.Y(
+                        field="disease",
+                        type="nominal",
+                        scale=alt.Scale(zero=False),
+                        title="",
+                        sort="-x",
+                    ),
+                    color=alt.value("grey"),
+                    tooltip=alt.Tooltip(
+                        field="count", type="quantitative", title="Number of deaths"
+                    ),
+                )
+                .transform_window(
+                    window=[{"op": "rank", "as": "rank"}],
+                    sort=[{"field": "count", "order": "descending"}],
+                )
+                .transform_filter("datum.rank <= 5")
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .interactive()
+        )
+    else:
+        disease_count_pc = (
+            disease_count_data_pc[
+                (disease_count_data["year"] == year)
+                & (disease_count_data["country"].isin(countries))
+                & (disease_count_data["disease"].isin(diseases))
+            ]
+            .groupby(by="disease")
+            .sum()
+            .reset_index()
+        )
+
+        disease_chart = (
+            (
+                alt.Chart(disease_count_pc)
+                .mark_bar()
+                .encode(
+                    x=alt.X(
+                        field="count_pkc",
+                        type="quantitative",
+                        title="Deaths per thousand 0-4-year-olds",
+                    ),
+                    y=alt.Y(
+                        field="disease",
+                        type="nominal",
+                        scale=alt.Scale(zero=False),
+                        title="",
+                        sort="-x",
+                    ),
+                    color=alt.value("grey"),
+                    tooltip=alt.Tooltip(
+                        field="count_pkc",
+                        type="quantitative",
+                        title="Deaths per thousand 0-4-year-olds",
+                    ),
+                )
+                .transform_window(
+                    window=[{"op": "rank", "as": "rank"}],
+                    sort=[{"field": "count_pkc", "order": "descending"}],
+                )
+                .transform_filter("datum.rank <= 5")
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .interactive()
+        )
     return disease_chart.to_html()
 
 
