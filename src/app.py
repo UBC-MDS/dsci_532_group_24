@@ -155,6 +155,7 @@ app.layout = dbc.Container(
     [
         dbc.Tabs(
             [
+                dbc.Tab(label="Trend"),
                 dbc.Tab(
                     [
                         html.H1("Causes of Child Mortality in Africa, 1990 - 2015"),
@@ -214,7 +215,7 @@ app.layout = dbc.Container(
                             ]
                         ),
                     ],
-                    label="Visualization",
+                    label="Snapshot",
                 ),
                 dbc.Tab(information_tab, label="Data Source and Explanation"),
             ]
@@ -515,8 +516,8 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=500,
-            width=500,
+            height=540,
+            width=540,
             geo_scope="africa",
             margin=dict(l=0, r=0, b=0, t=10),
             coloraxis_colorbar=dict(
