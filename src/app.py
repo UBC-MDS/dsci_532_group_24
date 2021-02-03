@@ -56,7 +56,7 @@ stat_type_controller_trend = html.Div(
                 {"label": "Raw number of deaths", "value": "raw_stats"},
                 {"label": "Deaths per thousand 0-4 year-olds", "value": "pc_k"},
             ],
-            value="raw_stats",
+            value="pc_k",
             labelStyle={"display": "block"},
         ),
     ]
@@ -118,7 +118,7 @@ stat_type_controller_snapshot = html.Div(
                 {"label": "Raw number of deaths", "value": "raw_stats"},
                 {"label": "Deaths per thousand 0-4 year-olds", "value": "pc_k"},
             ],
-            value="raw_stats",
+            value="pc_k",
             labelStyle={"display": "block"},
         ),
     ]
@@ -184,8 +184,8 @@ default_number_selector_snapshot = html.Div(
         ),
         dcc.Dropdown(
             id="default_number_widget_snapshot",
-            options=[{"label": str(n), "value": n} for n in range(3, 11)],
-            value=8,
+            options=[{"label": str(n), "value": n} for n in range(5, 15)],
+            value=10,
             style=dict(width="40%", verticalAlign="middle"),
         ),
     ],
@@ -269,34 +269,76 @@ app.layout = dbc.Container(
                                     [
                                         dbc.Col(
                                             [
-                                                html.Br(),
-                                                html.Label("Select statistic type: "),
-                                                stat_type_controller_trend,
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select statistic type: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                stat_type_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
                                             ]
                                         ),
+                                        html.Br(),
                                         dbc.Col(
                                             [
-                                                html.Br(),
-                                                html.Label("Filter Country: "),
-                                                country_controller_trend,
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select country: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                country_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
                                             ]
                                         ),
+                                        html.Br(),
                                         dbc.Col(
                                             [
-                                                html.Br(),
-                                                html.Label("Filter Year: "),
-                                                year_range_controller_trend,
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader("Select year: "),
+                                                        dbc.CardBody(
+                                                            [
+                                                                year_range_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
                                             ]
                                         ),
+                                        html.Br(),
                                         dbc.Col(
                                             [
-                                                html.Br(),
-                                                html.Label("Filter Disease: "),
-                                                disease_controller_trend,
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Filter disease: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                disease_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
                                             ]
                                         ),
                                     ],
                                     md=3,
+                                    style={
+                                        "background-color": "#e6e6e6",
+                                        "padding": 15,
+                                        "border-radius": 3,
+                                    },
                                 ),
                                 dbc.Col(
                                     [
@@ -337,80 +379,122 @@ app.layout = dbc.Container(
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
                         ),
-                        dbc.Row(
+                        dbc.Col(
                             [
-                                dbc.Col(
+                                dbc.Row(
                                     [
                                         dbc.Col(
                                             [
-                                                html.Br(),
-                                                html.Label("Select statistic type: "),
-                                                stat_type_controller_snapshot,
-                                            ]
-                                        ),
-                                        dbc.Col(
-                                            [
-                                                html.Br(),
-                                                html.Label("Filter Country: "),
-                                                country_controller_snapshot,
-                                            ]
-                                        ),
-                                        dbc.Col(
-                                            [
-                                                html.Br(),
-                                                html.Label("Select Year: "),
-                                                year_controller_snapshot,
-                                            ]
-                                        ),
-                                        dbc.Col(
-                                            [
-                                                html.Br(),
-                                                html.Label("Filter Disease: "),
-                                                disease_controller_snapshot,
-                                            ]
-                                        ),
-                                    ],
-                                    md=3,
-                                ),
-                                dbc.Col(
-                                    [
-                                        default_number_selector_snapshot,
-                                        html.Iframe(
-                                            id="country_chart_snapshot",
-                                            style={
-                                                "border-width": "0",
-                                                "width": "120%",
-                                                "height": "100%",
-                                            },
-                                        ),
-                                        "Diseases by Number of Deaths",
-                                        html.Iframe(
-                                            id="disease_chart_snapshot",
-                                            style={
-                                                "border-width": "0",
-                                                "width": "120%",
-                                                "height": "100%",
-                                            },
-                                        ),
-                                    ],
-                                    md=4.5,
-                                ),
-                                dbc.Col(
-                                    [
-                                        dbc.Row(
-                                            [
-                                                dcc.Graph(
-                                                    id="map_snapshot",
-                                                    style={
-                                                        "border-width": "0",
-                                                        "width": "0vh",
-                                                        "height": "0vh",
-                                                    },
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select statistic type: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                stat_type_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
                                                 )
                                             ]
-                                        )
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select country: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                country_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ],
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader("Select year: "),
+                                                        dbc.CardBody(
+                                                            [
+                                                                year_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Filter disease: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                disease_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
                                     ],
-                                    md=4.5,
+                                    style={
+                                        "background-color": "#e6e6e6",
+                                        "padding": 15,
+                                        "border-radius": 3,
+                                    },
+                                ),
+                                html.Br(),
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            [
+                                                default_number_selector_snapshot,
+                                                html.Iframe(
+                                                    id="country_chart_snapshot",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "60vh",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                        dbc.Col(
+                                            dcc.Graph(
+                                                id="map_snapshot",
+                                                style={
+                                                    "border-width": "0",
+                                                    "width": "100%",
+                                                    "height": "50vh",
+                                                },
+                                            )
+                                        ),
+                                        dbc.Col(
+                                            [
+                                                "Diseases by Number of Deaths",
+                                                html.Iframe(
+                                                    id="disease_chart_snapshot",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "60vh",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                    ],
                                 ),
                             ]
                         ),
@@ -690,7 +774,7 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
             .transform_filter("datum.rank <= " + str(number_default_countries))
         )
     return (
-        country_chart.properties(width=400, height=300)
+        country_chart.properties(width=380, height=500)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .interactive()
         .to_html()
@@ -787,7 +871,7 @@ def plot_disease(year, countries, diseases, stat_type):
             .transform_filter("datum.rank <= 5")
         )
     return (
-        disease_chart.properties(width=400, height=300)
+        disease_chart.properties(width=380, height=500)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .interactive()
         .to_html()
@@ -823,8 +907,8 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=800,
-            width=700,
+            height=700,
+            width=600,
             geo_scope="africa",
             margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
@@ -855,8 +939,8 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=800,
-            width=700,
+            height=700,
+            width=600,
             geo_scope="africa",
             margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
