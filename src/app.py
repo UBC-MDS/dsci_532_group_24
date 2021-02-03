@@ -334,6 +334,9 @@ app.layout = dbc.Container(
                                                         dbc.CardHeader("Select year: "),
                                                         dbc.CardBody(
                                                             [
+                                                                dbc.Row(
+                                                                    html.Div(id='year_display_snapshot', children="Selected year: ")
+                                                                ),
                                                                 year_controller_snapshot,
                                                             ],
                                                         ),
@@ -464,6 +467,9 @@ app.layout = dbc.Container(
                                                         dbc.CardHeader("Select year: "),
                                                         dbc.CardBody(
                                                             [
+                                                                dbc.Row(
+                                                                    html.Div(id='year_display_trend', children="Selected year: ")
+                                                                ),
                                                                 year_range_controller_trend,
                                                             ],
                                                         ),
@@ -537,6 +543,18 @@ app.layout = dbc.Container(
 )
 
 @app.callback(
+    Output('year_display_snapshot', 'children'),
+    Input('year_widget_snapshot', 'value'))
+def selector_all_trend(selected):
+    return f"Selected year: {selected}"
+
+@app.callback(
+    Output('year_display_trend', 'children'),
+    Input('year_range_widget_trend', 'value'))
+def selector_all_trend(selected):
+    return f"Selected year range: {selected}"
+
+@app.callback(
     Output('country_widget_trend', 'value'),
     Input('select_all_trend', 'value'),
     Input('deselect_all_trend', 'value'),
@@ -565,9 +583,10 @@ def update_deselector_all_trend(select_all, selected, deselect_all):
     Output('select_all_trend', 'value'),
     Input('deselect_all_trend', 'value'),
     Input('country_widget_trend', 'value'),
+    State('country_widget_trend', 'options'),
     State('select_all_trend', 'value'))
-def update_selector_all_trend(deselect_all, selected, select_all):
-    if 0 in deselect_all or selected:
+def update_selector_all_trend(deselect_all, selected, options, select_all):
+    if 0 in deselect_all or selected != [i['value'] for i in options]:
         return []
     else:
         return select_all
@@ -602,9 +621,10 @@ def update_deselector_all_snapshot(select_all, selected, deselect_all):
     Output('select_all_snapshot', 'value'),
     Input('deselect_all_snapshot', 'value'),
     Input('country_widget_snapshot', 'value'),
+    State('country_widget_snapshot', 'options'),
     State('select_all_snapshot', 'value'))
-def update_selector_all_snapshot(deselect_all, selected, select_all):
-    if 0 in deselect_all or selected:
+def update_selector_all_snapshot(deselect_all, selected, options, select_all):
+    if 0 in deselect_all or selected != [i['value'] for i in options]:
         return []
     else:
         return select_all
