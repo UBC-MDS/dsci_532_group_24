@@ -392,7 +392,8 @@ app.layout = dbc.Container(
                                                 "height": "100%",
                                             },
                                         ),
-                                    ]
+                                    ],
+                                    md=4.5,
                                 ),
                                 dbc.Col(
                                     [
@@ -408,7 +409,8 @@ app.layout = dbc.Container(
                                                 )
                                             ]
                                         )
-                                    ]
+                                    ],
+                                    md=4.5,
                                 ),
                             ]
                         ),
