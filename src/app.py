@@ -145,7 +145,7 @@ year_controller_snapshot = html.Div(
             id="year_widget_snapshot",
             min=1990,
             max=2015,
-            value=2005,
+            value=2015,
             marks={
                 1990: "1990",
                 1995: "1995",
@@ -285,124 +285,6 @@ app.layout = dbc.Container(
             [
                 dbc.Tab(
                     [
-                        html.H1(
-                            "Trends of Child Diseases and Mortality in Africa, 1990 - 2015"
-                        ),
-                        html.P(
-                            "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
-                        ),
-                        dbc.Row(
-                            [
-                                dbc.Col(
-                                    [
-                                        dbc.Col(
-                                            [
-                                                dbc.Card(
-                                                    [
-                                                        dbc.CardHeader(
-                                                            "Select statistic type: "
-                                                        ),
-                                                        dbc.CardBody(
-                                                            [
-                                                                stat_type_controller_trend,
-                                                            ],
-                                                        ),
-                                                    ]
-                                                )
-                                            ]
-                                        ),
-                                        html.Br(),
-                                        dbc.Col(
-                                            [
-                                                dbc.Card(
-                                                    [
-                                                        dbc.CardHeader(
-                                                            "Select country: "
-                                                        ),
-                                                        dbc.CardBody(
-                                                            [
-                                                                country_controller_trend,
-                                                            ],
-                                                        ),
-                                                    ]
-                                                )
-                                            ]
-                                        ),
-                                        html.Br(),
-                                        dbc.Col(
-                                            [
-                                                dbc.Card(
-                                                    [
-                                                        dbc.CardHeader("Select year: "),
-                                                        dbc.CardBody(
-                                                            [
-                                                                year_range_controller_trend,
-                                                            ],
-                                                        ),
-                                                    ]
-                                                )
-                                            ]
-                                        ),
-                                        html.Br(),
-                                        dbc.Col(
-                                            [
-                                                dbc.Card(
-                                                    [
-                                                        dbc.CardHeader(
-                                                            "Filter disease: "
-                                                        ),
-                                                        dbc.CardBody(
-                                                            [
-                                                                disease_controller_trend,
-                                                            ],
-                                                        ),
-                                                    ]
-                                                )
-                                            ]
-                                        ),
-                                    ],
-                                    md=3,
-                                    style={
-                                        "background-color": "#e6e6e6",
-                                        "padding": 15,
-                                        "border-radius": 3,
-                                    },
-                                ),
-                                dbc.Col(
-                                    [
-                                        dbc.Col(
-                                            [
-                                                html.Iframe(
-                                                    id="country_chart_trend",
-                                                    style={
-                                                        "border-width": "0",
-                                                        "width": "100%",
-                                                        "height": "50vh",
-                                                    },
-                                                ),
-                                            ]
-                                        ),
-                                        dbc.Col(
-                                            [
-                                                html.Iframe(
-                                                    id="disease_chart_trend",
-                                                    style={
-                                                        "border-width": "0",
-                                                        "width": "100%",
-                                                        "height": "50vh",
-                                                    },
-                                                ),
-                                            ]
-                                        ),
-                                    ]
-                                ),
-                            ]
-                        ),
-                    ],
-                    label="Trend",
-                ),
-                dbc.Tab(
-                    [
                         html.H1("Child Diseases and Mortality in Africa, 1990 - 2015"),
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
@@ -528,6 +410,124 @@ app.layout = dbc.Container(
                         ),
                     ],
                     label="Snapshot",
+                ),
+                dbc.Tab(
+                    [
+                        html.H1(
+                            "Trends of Child Diseases and Mortality in Africa, 1990 - 2015"
+                        ),
+                        html.P(
+                            "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
+                        ),
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select statistic type: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                stat_type_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select country: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                country_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader("Select year: "),
+                                                        dbc.CardBody(
+                                                            [
+                                                                year_range_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Filter disease: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                disease_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                    ],
+                                    md=3,
+                                    style={
+                                        "background-color": "#e6e6e6",
+                                        "padding": 15,
+                                        "border-radius": 3,
+                                    },
+                                ),
+                                dbc.Col(
+                                    [
+                                        dbc.Col(
+                                            [
+                                                html.Iframe(
+                                                    id="country_chart_trend",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "50vh",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                        dbc.Col(
+                                            [
+                                                html.Iframe(
+                                                    id="disease_chart_trend",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "50vh",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+                    ],
+                    label="Trend",
                 ),
                 dbc.Tab(information_tab, label="Data Source and Explanation"),
             ]
