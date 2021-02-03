@@ -20,6 +20,7 @@ disease_count_map_data_pc = pd.read_pickle("data/disease_count_map_data_pc.pkl")
 
 ## Make country and disease lists
 country_list = list(clean_data["country"].unique())
+
 disease_list = [
     "HIV",
     "Malaria",
@@ -28,6 +29,21 @@ disease_list = [
     "NCD",
 ]
 
+default_country_list = [
+    "Nigeria",
+    "Congo, Dem, Rep.",
+    "Niger",
+    "Burkina Faso",
+    "Mali",
+    "South Africa",
+    "Ethiopia",
+    "Mozambique",
+    "Sierra Leone",
+    "South Sudan",
+    "Central African Republic",
+    "Chad",
+    "Guinea",
+]
 # Define elements
 
 ## Trend tab
@@ -72,11 +88,11 @@ country_controller_trend = html.Div(
         "Country",
         dcc.Dropdown(
             id="country_widget_trend",
-            value=country_list[0:5],
+            value=default_country_list,
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
@@ -90,7 +106,7 @@ disease_controller_trend = html.Div(
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
@@ -144,7 +160,7 @@ country_controller_snapshot = html.Div(
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
@@ -159,7 +175,7 @@ disease_controller_snapshot = html.Div(
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
