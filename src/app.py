@@ -3,7 +3,7 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import nbformat
 import plotly.graph_objects as go
 import plotly.express as px
@@ -148,6 +148,20 @@ year_controller_snapshot = html.Div(
 ### Country controller
 country_controller_snapshot = html.Div(
     [
+        dbc.Row([
+            dbc.Col([
+                dcc.Checklist(id='select_all_snapshot',
+                    options=[
+                        {'label': 'Select All', 'value': 1}
+                    ], value=[])
+                ]),
+            dbc.Col([
+                dcc.Checklist(id='deselect_all_snapshot',
+                    options=[
+                        {'label': 'Deselect All', 'value': 0}
+                    ], value=[])
+                ])
+        ]),
         dcc.Dropdown(
             id="country_widget_snapshot",
             value=default_country_list,
@@ -507,6 +521,46 @@ app.layout = dbc.Container(
     ],
     fluid=True,
 )
+
+@app.callback(
+    Output('country_widget_snapshot', 'value'),
+    [Input('select_all_snapshot', 'value')],
+    [Input('deselect_all_snapshot', 'value')],
+    [State('country_widget_snapshot', 'options'),
+     State('country_widget_snapshot', 'value')])
+def selector_all_snapshot(selected, deselected, options, value):
+    if 1 in selected:
+        return [i['value'] for i in options]
+    elif 0 in deselected:
+        return []
+    else:
+        return value
+
+@app.callback(
+    Output('deselect_all_snapshot', 'value'),
+    [Input('select_all_snapshot', 'value')],
+    [Input('country_widget_snapshot', 'value')],
+    [State('country_widget_snapshot', 'options'),
+     State('country_widget_snapshot', 'value')],
+    [State('deselect_all_snapshot', 'value')])
+def update_deselector_all_snapshot(select_all, selected, options, value, deselect_all):
+    if 1 in select_all or selected:
+        return []
+    else:
+        return deselect_all
+
+@app.callback(
+    Output('select_all_snapshot', 'value'),
+    [Input('deselect_all_snapshot', 'value')],
+    [Input('country_widget_snapshot', 'value')],
+    [State('country_widget_snapshot', 'options'),
+     State('country_widget_snapshot', 'value')],
+    [State('select_all_snapshot', 'value')])
+def update_selector_all_snapshot(deselect_all, selected, options, value, select_all):
+    if 0 in deselect_all or selected:
+        return []
+    else:
+        return select_all
 
 # Define charts
 ## Trend Tab
