@@ -47,16 +47,16 @@ default_country_list = [
 # Define elements
 
 ## Trend tab
+### Statatistic type controller
 stat_type_controller_trend = html.Div(
     [
-        "Statistic type",
         dcc.RadioItems(
             id="stat_type_widget_trend",
             options=[
                 {"label": "Raw number of deaths", "value": "raw_stats"},
                 {"label": "Deaths per thousand 0-4 year-olds", "value": "pc_k"},
             ],
-            value="raw_stats",
+            value="pc_k",
             labelStyle={"display": "block"},
         ),
     ]
@@ -65,7 +65,6 @@ stat_type_controller_trend = html.Div(
 ### Year range controller
 year_range_controller_trend = html.Div(
     [
-        "Year",
         dcc.RangeSlider(
             id="year_range_widget_trend",
             min=1990,
@@ -83,46 +82,43 @@ year_range_controller_trend = html.Div(
     ]
 )
 
+### Country controller
 country_controller_trend = html.Div(
     [
-        "Country",
         dcc.Dropdown(
             id="country_widget_trend",
             value=default_country_list,
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
-            style={"height": "100px"},
         ),
     ]
 )
 
+### Disease controller
 disease_controller_trend = html.Div(
     [
-        "Disease",
         dcc.Dropdown(
             id="disease_widget_trend",
             value=disease_list,
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
-            style={"height": "100px"},
         ),
     ]
 )
 
 ## Snapshot tab
-### Radio selector for statistic type
+###Statistic type controller
 stat_type_controller_snapshot = html.Div(
     [
-        "Statistic type",
         dcc.RadioItems(
             id="stat_type_widget_snapshot",
             options=[
                 {"label": "Raw number of deaths", "value": "raw_stats"},
                 {"label": "Deaths per thousand 0-4 year-olds", "value": "pc_k"},
             ],
-            value="raw_stats",
+            value="pc_k",
             labelStyle={"display": "block"},
         ),
     ]
@@ -131,7 +127,6 @@ stat_type_controller_snapshot = html.Div(
 ### Year controller
 year_controller_snapshot = html.Div(
     [
-        "Year",
         dcc.Slider(
             id="year_widget_snapshot",
             min=1990,
@@ -150,17 +145,15 @@ year_controller_snapshot = html.Div(
     ]
 )
 
-### Country_controller
+### Country controller
 country_controller_snapshot = html.Div(
     [
-        "Country",
         dcc.Dropdown(
             id="country_widget_snapshot",
-            value=country_list,
+            value=default_country_list,
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
-            style={"height": "100px"},
         ),
     ]
 )
@@ -168,14 +161,12 @@ country_controller_snapshot = html.Div(
 ### Disease controller
 disease_controller_snapshot = html.Div(
     [
-        "Disease_snapshot",
         dcc.Dropdown(
             id="disease_widget_snapshot",
             value=disease_list,
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
-            style={"height": "100px"},
         ),
     ]
 )
@@ -193,8 +184,8 @@ default_number_selector_snapshot = html.Div(
         ),
         dcc.Dropdown(
             id="default_number_widget_snapshot",
-            options=[{"label": str(n), "value": n} for n in range(3, 11)],
-            value=5,
+            options=[{"label": str(n), "value": n} for n in range(5, 15)],
+            value=10,
             style=dict(width="40%", verticalAlign="middle"),
         ),
     ],
@@ -230,7 +221,7 @@ row2 = html.Tr(
 )
 row3 = html.Tr(
     [
-        html.Td("Total Population by country"),
+        html.Td("Population aged from 0 to 4 year-olds by country"),
         html.Td(
             html.A(
                 "The United Nations, 2019 Revision of World Population Prospects",
@@ -243,6 +234,7 @@ row3 = html.Tr(
 table_body = [html.Tbody([row1, row2, row3])]
 
 information_tab = [
+    html.Br(),
     html.P(
         """
         This app is developed as part of DSCI 532's coursework. We intend to provide information to staff and volunteers at an international charity whose work focuses on healthcare and medication to children in Africa.
@@ -250,7 +242,8 @@ information_tab = [
         The table below summarizes the key data sources used in the app. 
         """
     ),
-    dbc.Table(table_header + table_body, bordered=True),
+    html.Br(),
+    dbc.Table(table_header + table_body, bordered=True, size=3),
 ]
 
 # Define app
@@ -270,20 +263,87 @@ app.layout = dbc.Container(
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
                         ),
-                        dbc.Col(
+                        dbc.Row(
                             [
-                                dbc.Row(
-                                    [
-                                        dbc.Col(country_controller_trend),
-                                        dbc.Col(year_range_controller_trend),
-                                        dbc.Col(disease_controller_trend),
-                                    ]
-                                ),
-                                dbc.Row(
+                                dbc.Col(
                                     [
                                         dbc.Col(
                                             [
-                                                # default_number_selector_trend,
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select statistic type: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                stat_type_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select country: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                country_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader("Select year: "),
+                                                        dbc.CardBody(
+                                                            [
+                                                                year_range_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Filter disease: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                disease_controller_trend,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                    ],
+                                    md=3,
+                                    style={
+                                        "background-color": "#e6e6e6",
+                                        "padding": 15,
+                                        "border-radius": 3,
+                                    },
+                                ),
+                                dbc.Col(
+                                    [
+                                        dbc.Col(
+                                            [
                                                 html.Iframe(
                                                     id="country_chart_trend",
                                                     style={
@@ -295,18 +355,19 @@ app.layout = dbc.Container(
                                             ]
                                         ),
                                         dbc.Col(
-                                            html.Iframe(
-                                                id="disease_chart_trend",
-                                                style={
-                                                    "border-width": "0",
-                                                    "width": "100%",
-                                                    "height": "50vh",
-                                                },
-                                            )
+                                            [
+                                                html.Iframe(
+                                                    id="disease_chart_trend",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "50vh",
+                                                    },
+                                                ),
+                                            ]
                                         ),
                                     ]
                                 ),
-                                dbc.Row([stat_type_controller_trend]),
                             ]
                         ),
                     ],
@@ -322,11 +383,79 @@ app.layout = dbc.Container(
                             [
                                 dbc.Row(
                                     [
-                                        dbc.Col(country_controller_snapshot),
-                                        dbc.Col(year_controller_snapshot),
-                                        dbc.Col(disease_controller_snapshot),
-                                    ]
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select statistic type: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                stat_type_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Select country: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                country_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ],
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader("Select year: "),
+                                                        dbc.CardBody(
+                                                            [
+                                                                year_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                        html.Br(),
+                                        dbc.Col(
+                                            [
+                                                dbc.Card(
+                                                    [
+                                                        dbc.CardHeader(
+                                                            "Filter disease: "
+                                                        ),
+                                                        dbc.CardBody(
+                                                            [
+                                                                disease_controller_snapshot,
+                                                            ],
+                                                        ),
+                                                    ]
+                                                )
+                                            ]
+                                        ),
+                                    ],
+                                    style={
+                                        "background-color": "#e6e6e6",
+                                        "padding": 15,
+                                        "border-radius": 3,
+                                    },
                                 ),
+                                html.Br(),
                                 dbc.Row(
                                     [
                                         dbc.Col(
@@ -337,7 +466,7 @@ app.layout = dbc.Container(
                                                     style={
                                                         "border-width": "0",
                                                         "width": "100%",
-                                                        "height": "50vh",
+                                                        "height": "60vh",
                                                     },
                                                 ),
                                             ]
@@ -360,14 +489,13 @@ app.layout = dbc.Container(
                                                     style={
                                                         "border-width": "0",
                                                         "width": "100%",
-                                                        "height": "50vh",
+                                                        "height": "60vh",
                                                     },
                                                 ),
                                             ]
                                         ),
-                                    ]
+                                    ],
                                 ),
-                                dbc.Row([stat_type_controller_snapshot]),
                             ]
                         ),
                     ],
@@ -417,10 +545,6 @@ def plot_country(year_range, countries, diseases, stat_type):
                 ),
                 color=alt.Color("country", title="Country"),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .configure_legend(orient="top")
-            .interactive()
         )
     else:
         year_chart = (
@@ -448,12 +572,14 @@ def plot_country(year_range, countries, diseases, stat_type):
                 ),
                 color=alt.Color("country", title="Country"),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .configure_legend(orient="top")
-            .interactive()
         )
-    return year_chart.to_html()
+    return (
+        year_chart.properties(width=700, height=300)
+        .configure_axis(labelFontSize=15, titleFontSize=20)
+        .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
+        .interactive()
+        .to_html()
+    )
 
 
 ### Line chart by disease
@@ -493,10 +619,6 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     "disease", title="Disease", scale=alt.Scale(scheme="cividis")
                 ),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .configure_legend(orient="top")
-            .interactive()
         )
     else:
         year_chart = (
@@ -526,12 +648,14 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     "disease", title="Disease", scale=alt.Scale(scheme="cividis")
                 ),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .configure_legend(orient="top")
-            .interactive()
         )
-    return year_chart.to_html()
+    return (
+        year_chart.properties(width=700, height=300)
+        .configure_axis(labelFontSize=15, titleFontSize=20)
+        .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
+        .interactive()
+        .to_html()
+    )
 
 
 ## Snapshot Tab
@@ -559,45 +683,40 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
         min_count = list(country_count["count"].sort_values(ascending=False))[-1]
         max_count = list(country_count["count"].sort_values(ascending=False))[0]
         country_chart = (
-            (
-                alt.Chart(country_count)
-                .mark_bar()
-                .encode(
-                    x=alt.X(
-                        field="count",
-                        type="quantitative",
-                        title="Number of deaths",
-                    ),
-                    y=alt.Y(
-                        field="country",
-                        type="nominal",
-                        scale=alt.Scale(zero=False),
-                        sort="-x",
-                        title="",
-                    ),
-                    color=alt.Color(
-                        field="count",
-                        type="quantitative",
-                        title="Count",
-                        sort="-x",
-                        legend=None,
-                        scale=alt.Scale(scheme="plasma", domain=[min_count, max_count]),
-                    ),
-                    tooltip=alt.Tooltip(
-                        field="count",
-                        type="quantitative",
-                        title="Number of deaths",
-                    ),
-                )
-                .transform_window(
-                    window=[{"op": "rank", "as": "rank"}],
-                    sort=[{"field": "count", "order": "descending"}],
-                )
-                .transform_filter("datum.rank <= " + str(number_default_countries))
+            alt.Chart(country_count)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    field="count",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
+                y=alt.Y(
+                    field="country",
+                    type="nominal",
+                    scale=alt.Scale(zero=False),
+                    sort="-x",
+                    title="",
+                ),
+                color=alt.Color(
+                    field="count",
+                    type="quantitative",
+                    title="Count",
+                    sort="-x",
+                    legend=None,
+                    scale=alt.Scale(scheme="plasma", domain=[min_count, max_count]),
+                ),
+                tooltip=alt.Tooltip(
+                    field="count",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .interactive()
+            .transform_window(
+                window=[{"op": "rank", "as": "rank"}],
+                sort=[{"field": "count", "order": "descending"}],
+            )
+            .transform_filter("datum.rank <= " + str(number_default_countries))
         )
     else:
         country_count_pc = (
@@ -617,49 +736,49 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
             0
         ]
         country_chart = (
-            (
-                alt.Chart(country_count_pc)
-                .mark_bar()
-                .encode(
-                    x=alt.X(
-                        field="count_pkc",
-                        type="quantitative",
-                        title="Deaths per thousand 0-4-year-olds",
+            alt.Chart(country_count_pc)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    field="count_pkc",
+                    type="quantitative",
+                    title="Deaths per thousand 0-4-year-olds",
+                ),
+                y=alt.Y(
+                    field="country",
+                    type="nominal",
+                    scale=alt.Scale(zero=False),
+                    sort="-x",
+                    title="",
+                ),
+                color=alt.Color(
+                    field="count_pkc",
+                    type="quantitative",
+                    title="Count per thousand",
+                    sort="-x",
+                    legend=None,
+                    scale=alt.Scale(
+                        scheme="plasma", domain=[min_count_pc, max_count_pc]
                     ),
-                    y=alt.Y(
-                        field="country",
-                        type="nominal",
-                        scale=alt.Scale(zero=False),
-                        sort="-x",
-                        title="",
-                    ),
-                    color=alt.Color(
-                        field="count_pkc",
-                        type="quantitative",
-                        title="Count per thousand",
-                        sort="-x",
-                        legend=None,
-                        scale=alt.Scale(
-                            scheme="plasma", domain=[min_count_pc, max_count_pc]
-                        ),
-                    ),
-                    tooltip=alt.Tooltip(
-                        field="count_pkc",
-                        type="quantitative",
-                        title="Deaths per thousand 0-4-year-olds",
-                    ),
-                )
-                .transform_window(
-                    window=[{"op": "rank", "as": "rank"}],
-                    sort=[{"field": "count_pkc", "order": "descending"}],
-                )
-                .transform_filter("datum.rank <= " + str(number_default_countries))
+                ),
+                tooltip=alt.Tooltip(
+                    field="count_pkc",
+                    type="quantitative",
+                    title="Deaths per thousand 0-4-year-olds",
+                ),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .interactive()
+            .transform_window(
+                window=[{"op": "rank", "as": "rank"}],
+                sort=[{"field": "count_pkc", "order": "descending"}],
+            )
+            .transform_filter("datum.rank <= " + str(number_default_countries))
         )
-    return country_chart.to_html()
+    return (
+        country_chart.properties(width=380, height=500)
+        .configure_axis(labelFontSize=15, titleFontSize=20)
+        .interactive()
+        .to_html()
+    )
 
 
 ### Chart by disease
@@ -684,36 +803,31 @@ def plot_disease(year, countries, diseases, stat_type):
         )
 
         disease_chart = (
-            (
-                alt.Chart(disease_count)
-                .mark_bar()
-                .encode(
-                    x=alt.X(
-                        field="count",
-                        type="quantitative",
-                        title="Number of deaths",
-                    ),
-                    y=alt.Y(
-                        field="disease",
-                        type="nominal",
-                        scale=alt.Scale(zero=False),
-                        title="",
-                        sort="-x",
-                    ),
-                    color=alt.value("grey"),
-                    tooltip=alt.Tooltip(
-                        field="count", type="quantitative", title="Number of deaths"
-                    ),
-                )
-                .transform_window(
-                    window=[{"op": "rank", "as": "rank"}],
-                    sort=[{"field": "count", "order": "descending"}],
-                )
-                .transform_filter("datum.rank <= 5")
+            alt.Chart(disease_count)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    field="count",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
+                y=alt.Y(
+                    field="disease",
+                    type="nominal",
+                    scale=alt.Scale(zero=False),
+                    title="",
+                    sort="-x",
+                ),
+                color=alt.value("grey"),
+                tooltip=alt.Tooltip(
+                    field="count", type="quantitative", title="Number of deaths"
+                ),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .interactive()
+            .transform_window(
+                window=[{"op": "rank", "as": "rank"}],
+                sort=[{"field": "count", "order": "descending"}],
+            )
+            .transform_filter("datum.rank <= 5")
         )
     else:
         disease_count_pc = (
@@ -728,40 +842,40 @@ def plot_disease(year, countries, diseases, stat_type):
         )
 
         disease_chart = (
-            (
-                alt.Chart(disease_count_pc)
-                .mark_bar()
-                .encode(
-                    x=alt.X(
-                        field="count_pkc",
-                        type="quantitative",
-                        title="Deaths per thousand 0-4-year-olds",
-                    ),
-                    y=alt.Y(
-                        field="disease",
-                        type="nominal",
-                        scale=alt.Scale(zero=False),
-                        title="",
-                        sort="-x",
-                    ),
-                    color=alt.value("grey"),
-                    tooltip=alt.Tooltip(
-                        field="count_pkc",
-                        type="quantitative",
-                        title="Deaths per thousand 0-4-year-olds",
-                    ),
-                )
-                .transform_window(
-                    window=[{"op": "rank", "as": "rank"}],
-                    sort=[{"field": "count_pkc", "order": "descending"}],
-                )
-                .transform_filter("datum.rank <= 5")
+            alt.Chart(disease_count_pc)
+            .mark_bar()
+            .encode(
+                x=alt.X(
+                    field="count_pkc",
+                    type="quantitative",
+                    title="Deaths per thousand 0-4-year-olds",
+                ),
+                y=alt.Y(
+                    field="disease",
+                    type="nominal",
+                    scale=alt.Scale(zero=False),
+                    title="",
+                    sort="-x",
+                ),
+                color=alt.value("grey"),
+                tooltip=alt.Tooltip(
+                    field="count_pkc",
+                    type="quantitative",
+                    title="Deaths per thousand 0-4-year-olds",
+                ),
             )
-            .properties(width=350, height=300)
-            .configure_axis(labelFontSize=15, titleFontSize=20)
-            .interactive()
+            .transform_window(
+                window=[{"op": "rank", "as": "rank"}],
+                sort=[{"field": "count_pkc", "order": "descending"}],
+            )
+            .transform_filter("datum.rank <= 5")
         )
-    return disease_chart.to_html()
+    return (
+        disease_chart.properties(width=380, height=500)
+        .configure_axis(labelFontSize=15, titleFontSize=20)
+        .interactive()
+        .to_html()
+    )
 
 
 ### Map
@@ -793,10 +907,10 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=500,
-            width=500,
+            height=700,
+            width=600,
             geo_scope="africa",
-            margin=dict(l=0, r=0, b=0, t=10),
+            margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
                 title="Total deaths",
                 thicknessmode="pixels",
@@ -825,10 +939,10 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=540,
-            width=540,
+            height=700,
+            width=600,
             geo_scope="africa",
-            margin=dict(l=0, r=0, b=0, t=10),
+            margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
                 title="Deaths per 1,000<br>0-4-year-olds",
                 thicknessmode="pixels",
