@@ -770,6 +770,9 @@ def plot_disease(year_range, countries, diseases, stat_type):
     Input("default_number_widget_snapshot", "value"),
 )
 def plot_country(year, countries, diseases, stat_type, number_default_countries):
+    if not(number_default_countries):
+        number_default_countries = 0
+
     if stat_type == "raw_stats":
         country_count = (
             disease_count_data[
