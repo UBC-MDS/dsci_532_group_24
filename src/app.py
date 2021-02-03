@@ -28,12 +28,14 @@ disease_list = [
     "NCD",
 ]
 
-# Define radio selector for statistic type
-stat_type_controller = html.Div(
+# Define elements
+
+## Trend tab
+stat_type_controller_trend = html.Div(
     [
         "Statistic type",
         dcc.RadioItems(
-            id="stat_type_widget",
+            id="stat_type_widget_trend",
             options=[
                 {"label": "Raw number of deaths", "value": "raw_stats"},
                 {"label": "Deaths per thousand 0-4 year-olds", "value": "pc_k"},
@@ -44,12 +46,78 @@ stat_type_controller = html.Div(
     ]
 )
 
-# Define three controllers
-year_controller = html.Div(
+### Year range controller
+year_range_controller_trend = html.Div(
+    [
+        "Year",
+        dcc.RangeSlider(
+            id="year_range_widget_trend",
+            min=1990,
+            max=2015,
+            value=[2000, 2010],
+            marks={
+                1990: "1990",
+                1995: "1995",
+                2000: "2000",
+                2005: "2005",
+                2010: "2010",
+                2015: "2015",
+            },
+        ),
+    ]
+)
+
+country_controller_trend = html.Div(
+    [
+        "Country",
+        dcc.Dropdown(
+            id="country_widget_trend",
+            value=country_list[0:5],
+            placeholder="Select a country...",
+            options=[{"label": country, "value": country} for country in country_list],
+            multi=True,
+            style={"overflow-y": "scroll", "height": "100px"},
+        ),
+    ]
+)
+
+disease_controller_trend = html.Div(
+    [
+        "Disease",
+        dcc.Dropdown(
+            id="disease_widget_trend",
+            value=disease_list,
+            placeholder="Select a disease...",
+            options=[{"label": disease, "value": disease} for disease in disease_list],
+            multi=True,
+            style={"overflow-y": "scroll", "height": "100px"},
+        ),
+    ]
+)
+
+## Snapshot tab
+### Radio selector for statistic type
+stat_type_controller_snapshot = html.Div(
+    [
+        "Statistic type",
+        dcc.RadioItems(
+            id="stat_type_widget_snapshot",
+            options=[
+                {"label": "Raw number of deaths", "value": "raw_stats"},
+                {"label": "Deaths per thousand 0-4 year-olds", "value": "pc_k"},
+            ],
+            value="raw_stats",
+            labelStyle={"display": "block"},
+        ),
+    ]
+)
+
+### Year controller
+year_controller_snapshot = html.Div(
     [
         "Year",
         dcc.Slider(
-            id="year_widget",
+            id="year_widget_snapshot",
             min=1990,
             max=2015,
             value=2005,
@@ -66,11 +134,12 @@ year_controller = html.Div(
     ]
 )
 
-country_controller = html.Div(
+### Country_controller
+country_controller_snapshot = html.Div(
     [
         "Country",
         dcc.Dropdown(
-            id="country_widget",
+            id="country_widget_snapshot",
             value=country_list,
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
@@ -80,11 +149,12 @@ country_controller = html.Div(
     ]
 )
 
-disease_controller = html.Div(
+### Disease controller
+disease_controller_snapshot = html.Div(
     [
-        "Disease",
+        "Disease_snapshot",
         dcc.Dropdown(
-            id="disease_widget",
+            id="disease_widget_snapshot",
             value=disease_list,
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
@@ -94,19 +164,19 @@ disease_controller = html.Div(
     ]
 )
 
-# Define default number selector
-default_number_selector = html.Div(
+### Default number selector
+default_number_selector_snapshot = html.Div(
     [
         html.Div(
             [
                 html.H6(
-                    """Select number of countries to show""",
+                    """Select maximum number of countries to show""",
                     style={"margin-right": "1em"},
                 )
             ],
         ),
         dcc.Dropdown(
-            id="default_number_widget",
+            id="default_number_widget_snapshot",
             options=[{"label": str(n), "value": n} for n in range(3, 11)],
             value=5,
             style=dict(width="40%", verticalAlign="middle"),
@@ -115,55 +185,7 @@ default_number_selector = html.Div(
     style=dict(display="flex"),
 )
 
-year_range_controller = html.Div(
-    [
-        "Year",
-        dcc.RangeSlider(
-            id="year_range_widget",
-            min=1990,
-            max=2015,
-            value=[2000, 2010],
-            marks={
-                1990: "1990",
-                1995: "1995",
-                2000: "2000",
-                2005: "2005",
-                2010: "2010",
-                2015: "2015",
-            },
-        ),
-    ]
-)
-
-country5_controller = html.Div(
-    [
-        "Country",
-        dcc.Dropdown(
-            id="country5_widget",
-            value=country_list[0 :5],
-            placeholder="Select a country...",
-            options=[{"label": country, "value": country} for country in country_list],
-            multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
-        ),
-    ]
-)
-
-disease_line_controller = html.Div(
-    [
-        "Disease",
-        dcc.Dropdown(
-            id="disease_line_widget",
-            value=disease_list,
-            placeholder="Select a disease...",
-            options=[{"label": disease, "value": disease} for disease in disease_list],
-            multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
-        ),
-    ]
-)
-
-# Define information tab
+## information tab
 table_header = [html.Thead(html.Tr([html.Th("Variable"), html.Th("Source")]))]
 
 row1 = html.Tr(
@@ -226,48 +248,9 @@ app.layout = dbc.Container(
             [
                 dbc.Tab(
                     [
-                        html.H1("Tendency"),
-                        html.P("App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"),
-                        dbc.Col(
-                            [
-                                dbc.Row(
-                                    [
-                                        dbc.Col(country5_controller),
-                                        dbc.Col(year_range_controller),
-                                        dbc.Col(disease_line_controller),
-                                    ]
-                                ),
-                                dbc.Row(
-                                    [
-                                        dbc.Col(
-                                            html.Iframe(
-                                                id="country_line",
-                                                style={
-                                                    "border-width": "0",
-                                                    "width": "100%",
-                                                    "height": "50vh",
-                                                },
-                                            )
-                                        ),
-                                        dbc.Col(
-                                            html.Iframe(
-                                                id="disease_line",
-                                                style={
-                                                    "border-width": "0",
-                                                    "width": "100%",
-                                                    "height": "50vh",
-                                                },
-                                            )
-                                        ),
-                                    ]
-                                ),
-                            ]
-                        )
-                    ],
-                    label="Trend"),
-                dbc.Tab(
-                    [
-                        html.H1("Causes of Child Mortality in Africa, 1990 - 2015"),
+                        html.H1(
+                            "Trends of Child Diseases and Mortality in Africa, 1990 - 2015"
+                        ),
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
                         ),
@@ -275,18 +258,66 @@ app.layout = dbc.Container(
                             [
                                 dbc.Row(
                                     [
-                                        dbc.Col(country_controller),
-                                        dbc.Col(year_controller),
-                                        dbc.Col(disease_controller),
+                                        dbc.Col(country_controller_trend),
+                                        dbc.Col(year_range_controller_trend),
+                                        dbc.Col(disease_controller_trend),
                                     ]
                                 ),
                                 dbc.Row(
                                     [
                                         dbc.Col(
                                             [
-                                                default_number_selector,
+                                                # default_number_selector_trend,
                                                 html.Iframe(
-                                                    id="country_chart",
+                                                    id="country_chart_trend",
+                                                    style={
+                                                        "border-width": "0",
+                                                        "width": "100%",
+                                                        "height": "50vh",
+                                                    },
+                                                ),
+                                            ]
+                                        ),
+                                        dbc.Col(
+                                            html.Iframe(
+                                                id="disease_chart_trend",
+                                                style={
+                                                    "border-width": "0",
+                                                    "width": "100%",
+                                                    "height": "50vh",
+                                                },
+                                            )
+                                        ),
+                                    ]
+                                ),
+                                dbc.Row([stat_type_controller_trend]),
+                            ]
+                        ),
+                    ],
+                    label="Trend",
+                ),
+                dbc.Tab(
+                    [
+                        html.H1("Child Diseases and Mortality in Africa, 1990 - 2015"),
+                        html.P(
+                            "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
+                        ),
+                        dbc.Col(
+                            [
+                                dbc.Row(
+                                    [
+                                        dbc.Col(country_controller_snapshot),
+                                        dbc.Col(year_controller_snapshot),
+                                        dbc.Col(disease_controller_snapshot),
+                                    ]
+                                ),
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            [
+                                                default_number_selector_snapshot,
+                                                html.Iframe(
+                                                    id="country_chart_snapshot",
                                                     style={
                                                         "border-width": "0",
                                                         "width": "100%",
@@ -297,7 +328,7 @@ app.layout = dbc.Container(
                                         ),
                                         dbc.Col(
                                             dcc.Graph(
-                                                id="map",
+                                                id="map_snapshot",
                                                 style={
                                                     "border-width": "0",
                                                     "width": "100%",
@@ -309,7 +340,7 @@ app.layout = dbc.Container(
                                             [
                                                 "Diseases by Number of Deaths",
                                                 html.Iframe(
-                                                    id="disease_chart",
+                                                    id="disease_chart_snapshot",
                                                     style={
                                                         "border-width": "0",
                                                         "width": "100%",
@@ -320,7 +351,7 @@ app.layout = dbc.Container(
                                         ),
                                     ]
                                 ),
-                                dbc.Row([stat_type_controller]),
+                                dbc.Row([stat_type_controller_snapshot]),
                             ]
                         ),
                     ],
@@ -334,17 +365,170 @@ app.layout = dbc.Container(
 )
 
 # Define charts
-## chart by country
+## Trend Tab
+###  Line chart by country
 @app.callback(
-    Output("country_chart", "srcDoc"),
-    Input("year_widget", "value"),
-    Input("country_widget", "value"),
-    Input("disease_widget", "value"),
-    Input("stat_type_widget", "value"),
-    Input("default_number_widget", "value"),
+    Output("country_chart_trend", "srcDoc"),
+    Input("year_range_widget_trend", "value"),
+    Input("country_widget_trend", "value"),
+    Input("disease_widget_trend", "value"),
+    Input("stat_type_widget_trend", "value"),
+)
+def plot_country(year_range, countries, diseases, stat_type):
+    if stat_type == "raw_stats":
+        year_chart = (
+            alt.Chart(
+                disease_count_data[
+                    (disease_count_data["year"] >= year_range[0])
+                    & (disease_count_data["year"] <= year_range[1])
+                    & (disease_count_data["country"].isin(countries))
+                    & (disease_count_data["disease"].isin(diseases))
+                ]
+            )
+            .mark_line()
+            .encode(
+                x=alt.X(
+                    "year",
+                    scale=alt.Scale(zero=False),
+                    title="Year",
+                    axis=alt.Axis(format="d"),
+                ),
+                y=alt.Y(
+                    field="count",
+                    aggregate="sum",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
+                color=alt.Color("country", title="Country"),
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .configure_legend(orient="top")
+            .interactive()
+        )
+    else:
+        year_chart = (
+            alt.Chart(
+                disease_count_data_pc[
+                    (disease_count_data_pc["year"] >= year_range[0])
+                    & (disease_count_data_pc["year"] <= year_range[1])
+                    & (disease_count_data_pc["country"].isin(countries))
+                    & (disease_count_data_pc["disease"].isin(diseases))
+                ]
+            )
+            .mark_line()
+            .encode(
+                x=alt.X(
+                    "year",
+                    scale=alt.Scale(zero=False),
+                    title="Year",
+                    axis=alt.Axis(format="d"),
+                ),
+                y=alt.Y(
+                    field="count_pkc",
+                    aggregate="sum",
+                    type="quantitative",
+                    title="Deaths per thousand 0-4-year-olds",
+                ),
+                color=alt.Color("country", title="Country"),
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .configure_legend(orient="top")
+            .interactive()
+        )
+    return year_chart.to_html()
+
+
+### Line chart by disease
+@app.callback(
+    Output("disease_chart_trend", "srcDoc"),
+    Input("year_range_widget_trend", "value"),
+    Input("country_widget_trend", "value"),
+    Input("disease_widget_trend", "value"),
+    Input("stat_type_widget_trend", "value"),
+)
+def plot_disease(year_range, countries, diseases, stat_type):
+    if stat_type == "raw_stats":
+        year_chart = (
+            alt.Chart(
+                disease_count_data[
+                    (disease_count_data["year"] >= year_range[0])
+                    & (disease_count_data["year"] <= year_range[1])
+                    & (disease_count_data["country"].isin(countries))
+                    & (disease_count_data["disease"].isin(diseases))
+                ]
+            )
+            .mark_line()
+            .encode(
+                x=alt.X(
+                    "year",
+                    scale=alt.Scale(zero=False),
+                    title="Year",
+                    axis=alt.Axis(format="d"),
+                ),
+                y=alt.Y(
+                    field="count",
+                    aggregate="sum",
+                    type="quantitative",
+                    title="Number of deaths",
+                ),
+                color=alt.Color(
+                    "disease", title="Disease", scale=alt.Scale(scheme="cividis")
+                ),
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .configure_legend(orient="top")
+            .interactive()
+        )
+    else:
+        year_chart = (
+            alt.Chart(
+                disease_count_data_pc[
+                    (disease_count_data_pc["year"] >= year_range[0])
+                    & (disease_count_data_pc["year"] <= year_range[1])
+                    & (disease_count_data_pc["country"].isin(countries))
+                    & (disease_count_data_pc["disease"].isin(diseases))
+                ]
+            )
+            .mark_line()
+            .encode(
+                x=alt.X(
+                    "year",
+                    scale=alt.Scale(zero=False),
+                    title="Year",
+                    axis=alt.Axis(format="d"),
+                ),
+                y=alt.Y(
+                    field="count_pkc",
+                    aggregate="sum",
+                    type="quantitative",
+                    title="Deaths per thousand 0-4-year-olds",
+                ),
+                color=alt.Color(
+                    "disease", title="Disease", scale=alt.Scale(scheme="cividis")
+                ),
+            )
+            .properties(width=350, height=300)
+            .configure_axis(labelFontSize=15, titleFontSize=20)
+            .configure_legend(orient="top")
+            .interactive()
+        )
+    return year_chart.to_html()
+
+
+## Snapshot Tab
+### chart by country
+@app.callback(
+    Output("country_chart_snapshot", "srcDoc"),
+    Input("year_widget_snapshot", "value"),
+    Input("country_widget_snapshot", "value"),
+    Input("disease_widget_snapshot", "value"),
+    Input("stat_type_widget_snapshot", "value"),
+    Input("default_number_widget_snapshot", "value"),
 )
 def plot_country(year, countries, diseases, stat_type, number_default_countries):
-    print(number_default_countries)
     if stat_type == "raw_stats":
         country_count = (
             disease_count_data[
@@ -462,13 +646,13 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
     return country_chart.to_html()
 
 
-## Chart by disease
+### Chart by disease
 @app.callback(
-    Output("disease_chart", "srcDoc"),
-    Input("year_widget", "value"),
-    Input("country_widget", "value"),
-    Input("disease_widget", "value"),
-    Input("stat_type_widget", "value"),
+    Output("disease_chart_snapshot", "srcDoc"),
+    Input("year_widget_snapshot", "value"),
+    Input("country_widget_snapshot", "value"),
+    Input("disease_widget_snapshot", "value"),
+    Input("stat_type_widget_snapshot", "value"),
 )
 def plot_disease(year, countries, diseases, stat_type):
     if stat_type == "raw_stats":
@@ -563,93 +747,14 @@ def plot_disease(year, countries, diseases, stat_type):
         )
     return disease_chart.to_html()
 
-## Line chart by country
+
+### Map
 @app.callback(
-    Output("country_line", "srcDoc"),
-    Input("year_range_widget", "value"),
-    Input("country5_widget", "value"),
-    Input("disease_line_widget", "value"),
-)
-def plot_country(year_range, countries, diseases):
-    year_chart = (
-        alt.Chart(
-            disease_count_data[
-                (disease_count_data["year"] >= year_range[0])
-                & (disease_count_data["year"] <= year_range[1])
-                & (disease_count_data["country"].isin(countries))
-                & (disease_count_data["disease"].isin(diseases))
-            ]
-        )
-        .mark_line()
-        .encode(
-            x=alt.X(
-                "year",
-                scale=alt.Scale(zero=False),
-                title="Year",
-                axis=alt.Axis(format="d"),
-            ),
-            y=alt.Y(
-                field="count",
-                aggregate="sum",
-                type="quantitative",
-                title="Number of deaths",
-            ),
-            color=alt.Color("country", title="Country"),
-        )
-        .configure_legend(orient="top")
-    )
-    return year_chart.to_html()
-
-
-## Line chart by disease
-@app.callback(
-    Output("disease_line", "srcDoc"),
-    Input("year_range_widget", "value"),
-    Input("country5_widget", "value"),
-    Input("disease_line_widget", "value"),
-)
-def plot_disease(year_range, countries, diseases):
-    year_chart = (
-        alt.Chart(
-            disease_count_data[
-                (disease_count_data["year"] >= year_range[0])
-                & (disease_count_data["year"] <= year_range[1])
-                & (disease_count_data["country"].isin(countries))
-                & (disease_count_data["disease"].isin(diseases))
-            ]
-        )
-        .mark_line()
-        .encode(
-            x=alt.X(
-                "year",
-                scale=alt.Scale(zero=False),
-                title="Year",
-                axis=alt.Axis(format="d"),
-            ),
-            y=alt.Y(
-                field="count",
-                aggregate="sum",
-                type="quantitative",
-                title="Number of deaths",
-            ),
-            color=alt.Color(
-                "disease", title="Disease", scale=alt.Scale(scheme="cividis")
-            ),
-        )
-        .configure_legend(orient="top")
-    )
-    return year_chart.to_html()
-
-
-# Define map
-
-
-@app.callback(
-    Output("map", "figure"),
-    Input("year_widget", "value"),
-    Input("country_widget", "value"),
-    Input("disease_widget", "value"),
-    Input("stat_type_widget", "value"),
+    Output("map_snapshot", "figure"),
+    Input("year_widget_snapshot", "value"),
+    Input("country_widget_snapshot", "value"),
+    Input("disease_widget_snapshot", "value"),
+    Input("stat_type_widget_snapshot", "value"),
 )
 def display_choropleth(year, countries, diseases, stat_type):
     if stat_type == "raw_stats":
