@@ -85,6 +85,20 @@ year_range_controller_trend = html.Div(
 ### Country controller
 country_controller_trend = html.Div(
     [
+        dbc.Row([
+            dbc.Col([
+                dcc.Checklist(id='select_all_trend',
+                    options=[
+                        {'label': 'Select All', 'value': 1}
+                    ], value=[])
+                ]),
+            dbc.Col([
+                dcc.Checklist(id='deselect_all_trend',
+                    options=[
+                        {'label': 'Deselect All', 'value': 0}
+                    ], value=[])
+                ])
+        ]),
         dcc.Dropdown(
             id="country_widget_trend",
             value=default_country_list,
@@ -523,11 +537,48 @@ app.layout = dbc.Container(
 )
 
 @app.callback(
+    Output('country_widget_trend', 'value'),
+    Input('select_all_trend', 'value'),
+    Input('deselect_all_trend', 'value'),
+    State('country_widget_trend', 'options'),
+    State('country_widget_trend', 'value'))
+def selector_all_trend(selected, deselected, options, value):
+    if 1 in selected:
+        return [i['value'] for i in options]
+    elif 0 in deselected:
+        return []
+    else:
+        return value
+
+@app.callback(
+    Output('deselect_all_trend', 'value'),
+    Input('select_all_trend', 'value'),
+    Input('country_widget_trend', 'value'),
+    State('deselect_all_trend', 'value'))
+def update_deselector_all_trend(select_all, selected, deselect_all):
+    if 1 in select_all or not(selected):
+        return []
+    else:
+        return deselect_all
+
+@app.callback(
+    Output('select_all_trend', 'value'),
+    Input('deselect_all_trend', 'value'),
+    Input('country_widget_trend', 'value'),
+    State('select_all_trend', 'value'))
+def update_selector_all_trend(deselect_all, selected, select_all):
+    if 0 in deselect_all or selected:
+        return []
+    else:
+        return select_all
+
+
+@app.callback(
     Output('country_widget_snapshot', 'value'),
-    [Input('select_all_snapshot', 'value')],
-    [Input('deselect_all_snapshot', 'value')],
-    [State('country_widget_snapshot', 'options'),
-     State('country_widget_snapshot', 'value')])
+    Input('select_all_snapshot', 'value'),
+    Input('deselect_all_snapshot', 'value'),
+    State('country_widget_snapshot', 'options'),
+    State('country_widget_snapshot', 'value'))
 def selector_all_snapshot(selected, deselected, options, value):
     if 1 in selected:
         return [i['value'] for i in options]
@@ -538,25 +589,21 @@ def selector_all_snapshot(selected, deselected, options, value):
 
 @app.callback(
     Output('deselect_all_snapshot', 'value'),
-    [Input('select_all_snapshot', 'value')],
-    [Input('country_widget_snapshot', 'value')],
-    [State('country_widget_snapshot', 'options'),
-     State('country_widget_snapshot', 'value')],
-    [State('deselect_all_snapshot', 'value')])
-def update_deselector_all_snapshot(select_all, selected, options, value, deselect_all):
-    if 1 in select_all or selected:
+    Input('select_all_snapshot', 'value'),
+    Input('country_widget_snapshot', 'value'),
+    State('deselect_all_snapshot', 'value'))
+def update_deselector_all_snapshot(select_all, selected, deselect_all):
+    if 1 in select_all or not(selected):
         return []
     else:
         return deselect_all
 
 @app.callback(
     Output('select_all_snapshot', 'value'),
-    [Input('deselect_all_snapshot', 'value')],
-    [Input('country_widget_snapshot', 'value')],
-    [State('country_widget_snapshot', 'options'),
-     State('country_widget_snapshot', 'value')],
-    [State('select_all_snapshot', 'value')])
-def update_selector_all_snapshot(deselect_all, selected, options, value, select_all):
+    Input('deselect_all_snapshot', 'value'),
+    Input('country_widget_snapshot', 'value'),
+    State('select_all_snapshot', 'value'))
+def update_selector_all_snapshot(deselect_all, selected, select_all):
     if 0 in deselect_all or selected:
         return []
     else:
@@ -785,10 +832,10 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
         )
         min_count_pc = list(country_count_pc["count_pkc"].sort_values(ascending=False))[
             -1
-        ]
+        ] if countries else None
         max_count_pc = list(country_count_pc["count_pkc"].sort_values(ascending=False))[
             0
-        ]
+        ] if countries else None
         country_chart = (
             alt.Chart(country_count_pc)
             .mark_bar()
