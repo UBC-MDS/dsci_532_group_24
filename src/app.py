@@ -644,7 +644,25 @@ def plot_country(year_range, countries, diseases, stat_type):
                     type="quantitative",
                     title="Number of deaths",
                 ),
-                color=alt.Color("country", title="Country"),
+                color=alt.Color("country", title="Country", legend=None),
+                tooltip=[
+                    alt.Tooltip(
+                        field="country",
+                        type="nominal",
+                        title="Country",
+                    ),
+                    alt.Tooltip(
+                        field="year",
+                        type="quantitative",
+                        title="Year",
+                    ),
+                    alt.Tooltip(
+                        field="count",
+                        aggregate="sum",
+                        type="quantitative",
+                        title="Number of deaths",
+                    )
+                ],
             )
         )
     else:
@@ -671,11 +689,33 @@ def plot_country(year_range, countries, diseases, stat_type):
                     type="quantitative",
                     title="Deaths per thousand 0-4-year-olds",
                 ),
-                color=alt.Color("country", title="Country"),
+                color=alt.Color("country", title="Country", legend=None),
+                tooltip=[
+                    alt.Tooltip(
+                        field="country",
+                        type="nominal",
+                        title="Country",
+                    ),
+                    alt.Tooltip(
+                        field="year",
+                        type="quantitative",
+                        title="Year",
+                    ),
+                    alt.Tooltip(
+                        field="count_pkc",
+                        aggregate="sum",
+                        type="quantitative",
+                        title="Deaths per 1000 0-4-year-olds",
+                    )
+                ],
             )
         )
     return (
-        year_chart.properties(width=700, height=300)
+        (year_chart + year_chart.mark_point().encode(
+                fill=alt.Fill(
+                    "country", title="Country"
+                ),
+        )).properties(width=700, height=300)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
         .interactive()
@@ -717,8 +757,26 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     title="Number of deaths",
                 ),
                 color=alt.Color(
-                    "disease", title="Disease", scale=alt.Scale(scheme="cividis")
+                    "disease", title="Disease", legend=None
                 ),
+                tooltip=[
+                    alt.Tooltip(
+                        field="disease",
+                        type="nominal",
+                        title="Disease",
+                    ),
+                    alt.Tooltip(
+                        field="year",
+                        type="quantitative",
+                        title="Year",
+                    ),
+                    alt.Tooltip(
+                        field="count",
+                        aggregate="sum",
+                        type="quantitative",
+                        title="Number of deaths",
+                    )
+                ],
             )
         )
     else:
@@ -746,12 +804,34 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     title="Deaths per thousand 0-4-year-olds",
                 ),
                 color=alt.Color(
-                    "disease", title="Disease", scale=alt.Scale(scheme="cividis")
+                    "disease", title="Disease", legend=None
                 ),
+                tooltip=[
+                    alt.Tooltip(
+                        field="disease",
+                        type="nominal",
+                        title="Disease",
+                    ),
+                    alt.Tooltip(
+                        field="year",
+                        type="quantitative",
+                        title="Year",
+                    ),
+                    alt.Tooltip(
+                        field="count_pkc",
+                        aggregate="sum",
+                        type="quantitative",
+                        title="Deaths per 1000 0-4-year-olds",
+                    )
+                ],
             )
         )
     return (
-        year_chart.properties(width=700, height=300)
+        (year_chart + year_chart.mark_point().encode(
+                fill=alt.Fill(
+                    "disease", title="Disease"
+                ),
+        )).properties(width=700, height=300)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
         .interactive()
@@ -770,6 +850,9 @@ def plot_disease(year_range, countries, diseases, stat_type):
     Input("default_number_widget_snapshot", "value"),
 )
 def plot_country(year, countries, diseases, stat_type, number_default_countries):
+    if not(number_default_countries):
+        number_default_countries = 0
+
     if stat_type == "raw_stats":
         country_count = (
             disease_count_data[
@@ -865,7 +948,7 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
                 tooltip=alt.Tooltip(
                     field="count_pkc",
                     type="quantitative",
-                    title="Deaths per thousand 0-4-year-olds",
+                    title="Deaths per 1000 0-4-year-olds",
                 ),
             )
             .transform_window(
@@ -962,7 +1045,7 @@ def plot_disease(year, countries, diseases, stat_type):
                 tooltip=alt.Tooltip(
                     field="count_pkc",
                     type="quantitative",
-                    title="Deaths per thousand 0-4-year-olds",
+                    title="Deaths per 1000 0-4-year-olds",
                 ),
             )
             .transform_window(
