@@ -28,6 +28,21 @@ disease_list = [
     "NCD",
 ]
 
+default_country_list = [
+    "Nigeria", 
+    "Congo, Dem, Rep.", 
+    "Niger", 
+    "Burkina Faso", 
+    "Mali", 
+    "South Africa", 
+    "Ethiopia", 
+    "Mozambique",
+    "Sierra Leone", 
+    "South Sudan", 
+    "Central African Republic", 
+    "Chad", 
+    "Guinea"]
+
 # Define radio selector for statistic type
 stat_type_controller = html.Div(
     [
@@ -71,11 +86,11 @@ country_controller = html.Div(
         "Country",
         dcc.Dropdown(
             id="country_widget",
-            value=country_list,
+            value=default_country_list,
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
@@ -89,7 +104,7 @@ disease_controller = html.Div(
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
@@ -144,7 +159,7 @@ country5_controller = html.Div(
             placeholder="Select a country...",
             options=[{"label": country, "value": country} for country in country_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
@@ -158,7 +173,7 @@ disease_line_controller = html.Div(
             placeholder="Select a disease...",
             options=[{"label": disease, "value": disease} for disease in disease_list],
             multi=True,
-            style={"overflow-y": "scroll", "height": "100px"},
+            style={"height": "100px"},
         ),
     ]
 )
@@ -344,7 +359,6 @@ app.layout = dbc.Container(
     Input("default_number_widget", "value"),
 )
 def plot_country(year, countries, diseases, stat_type, number_default_countries):
-    print(number_default_countries)
     if stat_type == "raw_stats":
         country_count = (
             disease_count_data[
