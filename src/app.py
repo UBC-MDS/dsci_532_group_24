@@ -374,6 +374,24 @@ app.layout = dbc.Container(
                                         dbc.Col(
                                             [
                                                 default_number_selector_snapshot,
+                                            ]
+                                        ),
+                                        dbc.Col(
+                                            [
+                                                "",
+                                            ]
+                                        ),
+                                        dbc.Col(
+                                            [
+                                                "",
+                                            ]
+                                        )
+                                    ]
+                                ),
+                                dbc.Row(
+                                    [
+                                        dbc.Col(
+                                            [
                                                 html.Iframe(
                                                     id="country_chart_snapshot",
                                                     style={
@@ -396,7 +414,7 @@ app.layout = dbc.Container(
                                         ),
                                         dbc.Col(
                                             [
-                                                "Diseases by Number of Deaths",
+                                                "",
                                                 html.Iframe(
                                                     id="disease_chart_snapshot",
                                                     style={
@@ -574,7 +592,7 @@ def selector_all_trend(selected, deselected, options, value):
     Input('country_widget_trend', 'value'),
     State('deselect_all_trend', 'value'))
 def update_deselector_all_trend(select_all, selected, deselect_all):
-    if 1 in select_all or not(selected):
+    if 1 in select_all or selected:
         return []
     else:
         return deselect_all
@@ -611,7 +629,7 @@ def selector_all_snapshot(selected, deselected, options, value):
     Input('country_widget_snapshot', 'value'),
     State('deselect_all_snapshot', 'value'))
 def update_deselector_all_snapshot(select_all, selected, deselect_all):
-    if 1 in select_all or not(selected):
+    if 1 in select_all or selected:
         return []
     else:
         return deselect_all
@@ -629,7 +647,7 @@ def update_selector_all_snapshot(deselect_all, selected, select_all):
 
 # Define charts
 ## Trend Tab
-###  Line chart by country
+###  Line chart by country over the selected year range
 @app.callback(
     Output("country_chart_trend", "srcDoc"),
     Input("year_range_widget_trend", "value"),
@@ -662,7 +680,7 @@ def plot_country(year_range, countries, diseases, stat_type):
                     type="quantitative",
                     title="Number of deaths",
                 ),
-                color=alt.Color("country", title="Country", legend=None),
+                color=alt.Color("country", title="Country", sort="-y", legend=None),
                 tooltip=[
                     alt.Tooltip(
                         field="country",
@@ -681,7 +699,7 @@ def plot_country(year_range, countries, diseases, stat_type):
                         title="Number of deaths",
                     )
                 ],
-            )
+            ).properties(title=f"Number of Children Deaths in Each Country between {year_range[0]} and {year_range[1]}")
         )
     else:
         year_chart = (
@@ -707,7 +725,7 @@ def plot_country(year_range, countries, diseases, stat_type):
                     type="quantitative",
                     title="Deaths per thousand 0-4-year-olds",
                 ),
-                color=alt.Color("country", title="Country", legend=None),
+                color=alt.Color("country", title="Country", sort="-y", legend=None),
                 tooltip=[
                     alt.Tooltip(
                         field="country",
@@ -727,14 +745,16 @@ def plot_country(year_range, countries, diseases, stat_type):
                         format='.2f'
                     )
                 ],
-            )
+            ).properties(title=f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]}")
         )
     return (
         (year_chart + year_chart.mark_point().encode(
                 fill=alt.Fill(
-                    "country", title="Country"
+                    "country", title="Country", sort="-y"
                 ),
-        )).properties(width=700, height=300)
+        )).properties(
+            width=700, height=300)
+        .configure_title(fontSize=20)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
         .interactive()
@@ -776,7 +796,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     title="Number of deaths",
                 ),
                 color=alt.Color(
-                    "disease", title="Disease", legend=None
+                    "disease", title="Disease", sort="-y", legend=None
                 ),
                 tooltip=[
                     alt.Tooltip(
@@ -796,7 +816,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
                         title="Number of deaths",
                     )
                 ],
-            )
+            ).properties(title=f"Number of Children Deaths from Each Disease between {year_range[0]} and {year_range[1]}")
         )
     else:
         year_chart = (
@@ -823,7 +843,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     title="Deaths per thousand 0-4-year-olds",
                 ),
                 color=alt.Color(
-                    "disease", title="Disease", legend=None
+                    "disease", title="Disease", sort="-y", legend=None
                 ),
                 tooltip=[
                     alt.Tooltip(
@@ -844,14 +864,15 @@ def plot_disease(year_range, countries, diseases, stat_type):
                         format='.2f'
                     )
                 ],
-            )
+            ).properties(title=f"Deaths Per 1000 Children from Each Disease between {year_range[0]} and {year_range[1]}")
         )
     return (
         (year_chart + year_chart.mark_point().encode(
                 fill=alt.Fill(
-                    "disease", title="Disease"
+                    "disease", title="Disease", sort="-y"
                 ),
         )).properties(width=700, height=300)
+        .configure_title(fontSize=20)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
         .interactive()
@@ -921,7 +942,7 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
                 sort=[{"field": "count", "order": "descending"}],
             )
             .transform_filter("datum.rank <= " + str(number_default_countries))
-        )
+        ).properties(title=f"{number_default_countries} Countries with Most Children Deaths in {year}")
     else:
         country_count_pc = (
             disease_count_data_pc[
@@ -976,10 +997,12 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
                 window=[{"op": "rank", "as": "rank"}],
                 sort=[{"field": "count_pkc", "order": "descending"}],
             )
-            .transform_filter("datum.rank <= " + str(number_default_countries))
+            .transform_filter("datum.rank <= " + str(number_default_countries)
+            ).properties(title=f"{number_default_countries} Countries with Most Deaths Per 1000 Children in {year}")
         )
     return (
         country_chart.properties(width=380, height=500)
+        .configure_title(fontSize=20)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .interactive()
         .to_html()
@@ -1033,6 +1056,7 @@ def plot_disease(year, countries, diseases, stat_type):
                 sort=[{"field": "count", "order": "descending"}],
             )
             .transform_filter("datum.rank <= 5")
+            .properties(title=f"Diseases Causing Most Children Deaths in {year}")
         )
     else:
         disease_count_pc = (
@@ -1075,9 +1099,11 @@ def plot_disease(year, countries, diseases, stat_type):
                 sort=[{"field": "count_pkc", "order": "descending"}],
             )
             .transform_filter("datum.rank <= 5")
+            .properties(title=f"Diseases Causing Most Deaths Per 1000 Children in {year}")
         )
     return (
         disease_chart.properties(width=380, height=500)
+        .configure_title(fontSize=20)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .interactive()
         .to_html()
