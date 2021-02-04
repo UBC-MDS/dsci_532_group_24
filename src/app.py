@@ -334,6 +334,9 @@ app.layout = dbc.Container(
                                                         dbc.CardHeader("Select year: "),
                                                         dbc.CardBody(
                                                             [
+                                                                dbc.Row(
+                                                                    html.Div(id='year_display_snapshot', children="Selected year: ")
+                                                                ),
                                                                 year_controller_snapshot,
                                                             ],
                                                         ),
@@ -464,6 +467,9 @@ app.layout = dbc.Container(
                                                         dbc.CardHeader("Select year: "),
                                                         dbc.CardBody(
                                                             [
+                                                                dbc.Row(
+                                                                    html.Div(id='year_display_trend', children="Selected year: ")
+                                                                ),
                                                                 year_range_controller_trend,
                                                             ],
                                                         ),
@@ -535,6 +541,18 @@ app.layout = dbc.Container(
     ],
     fluid=True,
 )
+
+@app.callback(
+    Output('year_display_snapshot', 'children'),
+    Input('year_widget_snapshot', 'value'))
+def selector_all_trend(selected):
+    return f"Selected year: {selected}"
+
+@app.callback(
+    Output('year_display_trend', 'children'),
+    Input('year_range_widget_trend', 'value'))
+def selector_all_trend(selected):
+    return f"Selected year range: {selected}"
 
 @app.callback(
     Output('country_widget_trend', 'value'),
