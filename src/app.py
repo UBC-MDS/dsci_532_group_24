@@ -724,6 +724,7 @@ def plot_country(year_range, countries, diseases, stat_type):
                         aggregate="sum",
                         type="quantitative",
                         title="Deaths per 1000 0-4-year-olds",
+                        format='.2f'
                     )
                 ],
             )
@@ -840,6 +841,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
                         aggregate="sum",
                         type="quantitative",
                         title="Deaths per 1000 0-4-year-olds",
+                        format='.2f'
                     )
                 ],
             )
@@ -967,6 +969,7 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
                     field="count_pkc",
                     type="quantitative",
                     title="Deaths per 1000 0-4-year-olds",
+                    format='.2f'
                 ),
             )
             .transform_window(
@@ -1064,6 +1067,7 @@ def plot_disease(year, countries, diseases, stat_type):
                     field="count_pkc",
                     type="quantitative",
                     title="Deaths per 1000 0-4-year-olds",
+                    format='.2f'
                 ),
             )
             .transform_window(
