@@ -39,9 +39,7 @@ default_country_list = [
     "Ethiopia",
     "Mozambique",
     "Sierra Leone",
-    "South Sudan",
     "Central African Republic",
-    "Chad",
     "Guinea",
 ]
 # Define elements
@@ -748,12 +746,12 @@ def plot_country(year_range, countries, diseases, stat_type):
             ).properties(title=f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]}")
         )
     return (
-        (year_chart + year_chart.mark_point().encode(
+        (year_chart + year_chart.mark_point(size=100).encode(
                 fill=alt.Fill(
                     "country", title="Country", sort="-y"
                 ),
         )).properties(
-            width=700, height=300)
+            width=800, height=500)
         .configure_title(fontSize=20)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
@@ -1139,8 +1137,8 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=700,
-            width=600,
+            # height=700,
+            # width=600,
             geo_scope="africa",
             margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
@@ -1171,8 +1169,8 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=700,
-            width=600,
+            # height=700,
+            # width=600,
             geo_scope="africa",
             margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
