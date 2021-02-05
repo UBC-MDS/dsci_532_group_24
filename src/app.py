@@ -39,9 +39,7 @@ default_country_list = [
     "Ethiopia",
     "Mozambique",
     "Sierra Leone",
-    "South Sudan",
     "Central African Republic",
-    "Chad",
     "Guinea",
 ]
 # Define elements
@@ -558,6 +556,7 @@ app.layout = dbc.Container(
         )
     ],
     fluid=True,
+    style = {'max-width' : '95%'}
 )
 
 @app.callback(
@@ -745,10 +744,11 @@ def plot_country(year_range, countries, diseases, stat_type):
                         format='.2f'
                     )
                 ],
-            ).properties(title=f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]}")
+            )
+            .properties(title=f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]}")
         )
     return (
-        (year_chart + year_chart.mark_point().encode(
+        (year_chart + year_chart.mark_point(size=50).encode(
                 fill=alt.Fill(
                     "country", title="Country", sort="-y"
                 ),
@@ -867,7 +867,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
             ).properties(title=f"Deaths Per 1000 Children from Each Disease between {year_range[0]} and {year_range[1]}")
         )
     return (
-        (year_chart + year_chart.mark_point().encode(
+        (year_chart + year_chart.mark_point(size=50).encode(
                 fill=alt.Fill(
                     "disease", title="Disease", sort="-y"
                 ),
@@ -1139,8 +1139,6 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=700,
-            width=600,
             geo_scope="africa",
             margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
@@ -1171,8 +1169,6 @@ def display_choropleth(year, countries, diseases, stat_type):
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
-            height=700,
-            width=600,
             geo_scope="africa",
             margin=dict(l=0, r=0, b=0, t=0),
             coloraxis_colorbar=dict(
