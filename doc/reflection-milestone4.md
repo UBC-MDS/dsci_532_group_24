@@ -1,4 +1,4 @@
-##Reflection
+## Reflection
 
 On our latest version, there are three tabs in total. The very first one shown in the app is ‘Sanpshot’. Based on the function we built on milestone 2. We change the color scheme of the country bar char to coordinate with our heating map. We also add a new statistic type, death per thousand 0-4 years-old, to give users more information about the African kids’ health, since sometimes the total number of deaths is misleading, given the fact that the country with higher population always has higher mortality. Then we add ‘Trend’ tab on our app to show the overall tendency of mortality of different countries and caused by different diseases over the years. Users could select the range of years, countries, and diseases easily they are interested in. 
 
