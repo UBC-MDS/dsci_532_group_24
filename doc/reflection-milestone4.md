@@ -9,5 +9,5 @@ The one chart we plant in milestone 2 stacked bar chart is not added in our fina
 Overall, we made a dashboard which is the same with our original plan and it is easy to use. There are 4 reason we choose to use Python to finalize our dashboard instead of R,
 1. All three of us prefer Python language.
 2. Heroku deployment in R is painful.
-3. We hate the ‘list’ in R…
+3. We hate the ‘list’ in R.
 4. We prefer the color scheme of Plotly maps in Python version.
