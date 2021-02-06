@@ -1262,12 +1262,13 @@ def display_choropleth(year, countries, diseases, stat_type):
             .agg(total_deaths=pd.NamedAgg(column="count", aggfunc="sum"))
             .reset_index()
         )
+        df = df.rename(columns={"total_deaths": "Total deaths"})
         fig = px.choropleth(
             df,
             locations="iso_alpha",
-            color="total_deaths",
+            color="Total deaths",
             hover_name="country",
-            hover_data={"iso_alpha": False, "total_deaths": ":.0f"},
+            hover_data={"iso_alpha": False, "Total deaths": ":.0f"},
             color_continuous_scale=px.colors.sequential.Plasma,
         )
         fig.update_layout(
