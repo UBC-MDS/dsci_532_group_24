@@ -43,11 +43,7 @@ default_country_list = [
     "Guinea",
 ]
 
-colors = {
-    'title': '#ffd17a',
-    'background': 'white',
-    'controls': '#f3ff94'
-}
+colors = {"title": "#ffd17a", "background": "white", "controls": "#f3ff94"}
 
 # Define elements
 
@@ -242,12 +238,17 @@ default_number_selector_snapshot = html.Div(
 )
 
 ## information tab
-table_header = [html.Thead(html.Tr([html.Th("Dataset"), html.Th("Data Source"),],
-                                   style={
-                                       'backgroundColor': 'rgb(230, 230, 230)',
-                                       'fontWeight': 'bold'
-                                       }
-                    ))]
+table_header = [
+    html.Thead(
+        html.Tr(
+            [
+                html.Th("Dataset"),
+                html.Th("Data Source"),
+            ],
+            style={"backgroundColor": "rgb(230, 230, 230)", "fontWeight": "bold"},
+        )
+    )
+]
 
 row1 = html.Tr(
     [
@@ -289,28 +290,28 @@ table_body = [html.Tbody([row1, row2, row3])]
 
 information_tab = [
     html.Br(),
-    html.P(
+    dcc.Markdown(
         """
         Although there has been significant progress in reducing preventable child deaths between 1999 and 2019, [2020 WHO fact sheet on improving children survival and well-being](https://www.who.int/en/news-room/fact-sheets/detail/children-reducing-mortality) discusses the prevalence of child mortality that persists in Sub-Saharan Africa, which accounts for the highest child mortality rate in the world. 
         For example, in 2019, 86 out of 1000 newborns in The Democratic Republic of the Congo, a nation with 86.79 million people, do not make it to their fifth birthday. In Chad, the number is as high as 117. By contrast, about 99.6% (996 in 1000) of Canadian newborns are still alive when they are five years old. 
         As internal data analysts for an international non-governmental organization (INGO), we are dedicated to using data to understand infant and child mortality across the African continent. 
-        """, 
-        style={   
+        """,
+        style={
             "border-radius": 3,
-        }  
+        },
     ),
     html.Br(),
-    html.P(
+    dcc.Markdown(
         """
         This app is developed as part of DSCI 532's coursework. We intend to provide information to staff and volunteers at an international charity whose work focuses on healthcare and medication to children in Africa.
         The underlying dataset of this app is obtained from Gapminder, an independent Swedish foundation, with a mission to fight misconceptions and promotes a fact-based worldview.
         The table below summarizes the key data sources used in the app. 
-        For the source code and detailed user guidance of this app, please visit our GitHub [repository](https://african-children-health-app.herokuapp.com/), where you can also share with us your feedback. 
+        For the source code and detailed user guidance of this app, please visit our GitHub [repository](https://github.com/UBC-MDS/dsci_532_group_24), where you can also share with us your feedback. 
         """,
         style={
             "border-radius": 3,
-        }  
-),
+        },
+    ),
     html.Br(),
     dbc.Table(table_header + table_body, bordered=True, size=3),
 ]
@@ -326,12 +327,15 @@ app.layout = dbc.Container(
             [
                 dbc.Tab(
                     [
-                        html.H1("Child Diseases and Mortality in Africa, 1990 - 2015",
+                        html.H1(
+                            "Child Diseases and Mortality in Africa, 1990 - 2015",
                             style={
-                                'backgroundColor': colors['title'],
-                                'padding': 20,
-                                'text-align': 'center',
-                                'border-radius': 3}),
+                                "backgroundColor": colors["title"],
+                                "padding": 20,
+                                "text-align": "center",
+                                "border-radius": 3,
+                            },
+                        ),
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
                         ),
@@ -382,12 +386,12 @@ app.layout = dbc.Container(
                                                             [
                                                                 dbc.Row(
                                                                     html.Div(
-                                                                        id='year_display_snapshot', 
+                                                                        id="year_display_snapshot",
                                                                         children="Selected year: ",
                                                                         style={
                                                                             "padding": 15,
                                                                             "border-radius": 3,
-                                                                        }
+                                                                        },
                                                                     )
                                                                 ),
                                                                 year_controller_snapshot,
@@ -416,7 +420,7 @@ app.layout = dbc.Container(
                                         ),
                                     ],
                                     style={
-                                        "background-color": colors['controls'],
+                                        "background-color": colors["controls"],
                                         "padding": 15,
                                         "border-radius": 3,
                                     },
@@ -490,11 +494,11 @@ app.layout = dbc.Container(
                         html.H1(
                             "Trends of Child Diseases and Mortality in Africa, 1990 - 2015",
                             style={
-                                'backgroundColor': colors['title'],
-                                'padding': 20,
-                                'text-align': 'center',
-                                'border-radius': 3
-                                },
+                                "backgroundColor": colors["title"],
+                                "padding": 20,
+                                "text-align": "center",
+                                "border-radius": 3,
+                            },
                         ),
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
@@ -546,12 +550,13 @@ app.layout = dbc.Container(
                                                             [
                                                                 dbc.Row(
                                                                     html.Div(
-                                                                        id='year_display_trend', 
+                                                                        id="year_display_trend",
                                                                         children="Selected year: ",
                                                                         style={
                                                                             "padding": 15,
                                                                             "border-radius": 3,
-                                                                        })
+                                                                        },
+                                                                    )
                                                                 ),
                                                                 year_range_controller_trend,
                                                             ],
@@ -580,7 +585,7 @@ app.layout = dbc.Container(
                                     ],
                                     md=3,
                                     style={
-                                        "background-color": colors['controls'],
+                                        "background-color": colors["controls"],
                                         "padding": 15,
                                         "border-radius": 3,
                                     },
@@ -623,10 +628,7 @@ app.layout = dbc.Container(
         )
     ],
     fluid=True,
-    style = {
-        'max-width' : '95%',
-        'backgroundColor': colors['background']
-        },
+    style={"max-width": "95%", "backgroundColor": colors["background"]},
 )
 
 
@@ -786,7 +788,7 @@ def plot_country(year_range, countries, diseases, stat_type):
             .properties(
                 title=[
                     f"Number of Children Deaths in Each Country between {year_range[0]} and {year_range[1]},",
-                    f"from the Selected Diseases"
+                    f"from the Selected Diseases",
                 ]
             )
         )
@@ -838,7 +840,7 @@ def plot_country(year_range, countries, diseases, stat_type):
             .properties(
                 title=[
                     f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]},",
-                    f"from the Selected Diseases"
+                    f"from the Selected Diseases",
                 ]
             )
         )
@@ -914,7 +916,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
             .properties(
                 title=[
                     f"Number of Children Deaths from Each Disease between {year_range[0]} and {year_range[1]},",
-                    f"in the Selected Countries"
+                    f"in the Selected Countries",
                 ]
             )
         )
@@ -966,7 +968,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
             .properties(
                 title=[
                     f"Deaths Per 1000 Children from Each Disease between {year_range[0]} and {year_range[1]},",
-                    f"in the Selected Countries"
+                    f"in the Selected Countries",
                 ]
             )
         )
@@ -1051,7 +1053,7 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
         ).properties(
             title=[
                 f"{number_default_countries} Countries with Most Children Deaths in {year},",
-                f"from the Selected Diseases"
+                f"from the Selected Diseases",
             ]
         )
     else:
@@ -1116,7 +1118,8 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
             .properties(
                 title=[
                     f"{number_default_countries} Countries with Most Deaths Per 1000 Children in {year},",
-                    f"from the Selected Diseases"]
+                    f"from the Selected Diseases",
+                ]
             )
         )
     return (
@@ -1175,9 +1178,10 @@ def plot_disease(year, countries, diseases, stat_type):
                 sort=[{"field": "count", "order": "descending"}],
             )
             .transform_filter("datum.rank <= 5")
-            .properties(title=[
-                f"Diseases Causing Most Children Deaths in {year},",
-                f"in the Selected Countries"
+            .properties(
+                title=[
+                    f"Diseases Causing Most Children Deaths in {year},",
+                    f"in the Selected Countries",
                 ]
             )
         )
@@ -1225,7 +1229,7 @@ def plot_disease(year, countries, diseases, stat_type):
             .properties(
                 title=[
                     f"Diseases Causing Most Deaths Per 1000 Children in {year},",
-                    f"in the Selected Countries"
+                    f"in the Selected Countries",
                 ]
             )
         )
@@ -1313,4 +1317,4 @@ def display_choropleth(year, countries, diseases, stat_type):
 
 # Run server
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server()
