@@ -66,9 +66,13 @@ The interactive and visual components of the app are entangled with each other i
 
 ## Dashboard in action
 
-![App animation](app-final-snapshot.gif)
+### `Snapshot` tab:
 
-![App animation](app-final-trend.gif)
+![App snapshot tab animation](app-final-snapshot.gif)
+
+### `Trend` tab:
+
+![App trend tab animation](app-final-trend.gif)
 
 ## Get involved
 
