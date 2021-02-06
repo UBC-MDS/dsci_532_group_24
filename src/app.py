@@ -1317,4 +1317,4 @@ def display_choropleth(year, countries, diseases, stat_type):
 
 # Run server
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server()
