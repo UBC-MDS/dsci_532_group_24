@@ -83,20 +83,28 @@ year_range_controller_trend = html.Div(
 ### Country controller
 country_controller_trend = html.Div(
     [
-        dbc.Row([
-            dbc.Col([
-                dcc.Checklist(id='select_all_trend',
-                    options=[
-                        {'label': 'Select All', 'value': 1}
-                    ], value=[])
-                ]),
-            dbc.Col([
-                dcc.Checklist(id='deselect_all_trend',
-                    options=[
-                        {'label': 'Deselect All', 'value': 0}
-                    ], value=[])
-                ])
-        ]),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dcc.Checklist(
+                            id="select_all_trend",
+                            options=[{"label": "Select All", "value": 1}],
+                            value=[],
+                        )
+                    ]
+                ),
+                dbc.Col(
+                    [
+                        dcc.Checklist(
+                            id="deselect_all_trend",
+                            options=[{"label": "Deselect All", "value": 0}],
+                            value=[],
+                        )
+                    ]
+                ),
+            ]
+        ),
         dcc.Dropdown(
             id="country_widget_trend",
             value=default_country_list,
@@ -160,20 +168,28 @@ year_controller_snapshot = html.Div(
 ### Country controller
 country_controller_snapshot = html.Div(
     [
-        dbc.Row([
-            dbc.Col([
-                dcc.Checklist(id='select_all_snapshot',
-                    options=[
-                        {'label': 'Select All', 'value': 1}
-                    ], value=[])
-                ]),
-            dbc.Col([
-                dcc.Checklist(id='deselect_all_snapshot',
-                    options=[
-                        {'label': 'Deselect All', 'value': 0}
-                    ], value=[])
-                ])
-        ]),
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        dcc.Checklist(
+                            id="select_all_snapshot",
+                            options=[{"label": "Select All", "value": 1}],
+                            value=[],
+                        )
+                    ]
+                ),
+                dbc.Col(
+                    [
+                        dcc.Checklist(
+                            id="deselect_all_snapshot",
+                            options=[{"label": "Deselect All", "value": 0}],
+                            value=[],
+                        )
+                    ]
+                ),
+            ]
+        ),
         dcc.Dropdown(
             id="country_widget_snapshot",
             value=default_country_list,
@@ -263,9 +279,18 @@ information_tab = [
     html.Br(),
     html.P(
         """
+        Although there has been significant progress in reducing preventable child deaths between 1999 and 2019, [2020 WHO fact sheet on improving children survival and well-being](https://www.who.int/en/news-room/fact-sheets/detail/children-reducing-mortality) discusses the prevalence of child mortality that persists in Sub-Saharan Africa, which accounts for the highest child mortality rate in the world. 
+        For example, in 2019, 86 out of 1000 newborns in The Democratic Republic of the Congo, a nation with 86.79 million people, do not make it to their fifth birthday. In Chad, the number is as high as 117. By contrast, about 99.6% (996 in 1000) of Canadian newborns are still alive when they are five years old. 
+        As internal data analysts for an international non-governmental organization (INGO), we are dedicated to using data to understand infant and child mortality across the African continent. 
+        """
+    ),
+    html.Br(),
+    html.P(
+        """
         This app is developed as part of DSCI 532's coursework. We intend to provide information to staff and volunteers at an international charity whose work focuses on healthcare and medication to children in Africa.
         The underlying dataset of this app is obtained from Gapminder, an independent Swedish foundation, with a mission to fight misconceptions and promotes a fact-based worldview.
         The table below summarizes the key data sources used in the app. 
+        For the source code and detailed user guidance of this app, please visit our GitHub [repository](https://african-children-health-app.herokuapp.com/), where you can also share with us your feedback. 
         """
     ),
     html.Br(),
@@ -333,7 +358,10 @@ app.layout = dbc.Container(
                                                         dbc.CardBody(
                                                             [
                                                                 dbc.Row(
-                                                                    html.Div(id='year_display_snapshot', children="Selected year: ")
+                                                                    html.Div(
+                                                                        id="year_display_snapshot",
+                                                                        children="Selected year: ",
+                                                                    )
                                                                 ),
                                                                 year_controller_snapshot,
                                                             ],
@@ -383,7 +411,7 @@ app.layout = dbc.Container(
                                             [
                                                 "",
                                             ]
-                                        )
+                                        ),
                                     ]
                                 ),
                                 dbc.Row(
@@ -484,7 +512,10 @@ app.layout = dbc.Container(
                                                         dbc.CardBody(
                                                             [
                                                                 dbc.Row(
-                                                                    html.Div(id='year_display_trend', children="Selected year: ")
+                                                                    html.Div(
+                                                                        id="year_display_trend",
+                                                                        children="Selected year: ",
+                                                                    )
                                                                 ),
                                                                 year_range_controller_trend,
                                                             ],
@@ -556,51 +587,59 @@ app.layout = dbc.Container(
         )
     ],
     fluid=True,
-    style = {'max-width' : '95%'}
+    style={"max-width": "95%"},
 )
 
+
 @app.callback(
-    Output('year_display_snapshot', 'children'),
-    Input('year_widget_snapshot', 'value'))
+    Output("year_display_snapshot", "children"), Input("year_widget_snapshot", "value")
+)
 def selector_all_trend(selected):
     return f"Selected year: {selected}"
 
+
 @app.callback(
-    Output('year_display_trend', 'children'),
-    Input('year_range_widget_trend', 'value'))
+    Output("year_display_trend", "children"), Input("year_range_widget_trend", "value")
+)
 def selector_all_trend(selected):
     return f"Selected year range: {selected}"
 
+
 @app.callback(
-    Output('country_widget_trend', 'value'),
-    Input('select_all_trend', 'value'),
-    Input('deselect_all_trend', 'value'),
-    State('country_widget_trend', 'options'),
-    State('country_widget_trend', 'value'))
+    Output("country_widget_trend", "value"),
+    Input("select_all_trend", "value"),
+    Input("deselect_all_trend", "value"),
+    State("country_widget_trend", "options"),
+    State("country_widget_trend", "value"),
+)
 def selector_all_trend(selected, deselected, options, value):
     if 1 in selected:
-        return [i['value'] for i in options]
+        return [i["value"] for i in options]
     elif 0 in deselected:
         return []
     else:
         return value
 
+
 @app.callback(
-    Output('deselect_all_trend', 'value'),
-    Input('select_all_trend', 'value'),
-    Input('country_widget_trend', 'value'),
-    State('deselect_all_trend', 'value'))
+    Output("deselect_all_trend", "value"),
+    Input("select_all_trend", "value"),
+    Input("country_widget_trend", "value"),
+    State("deselect_all_trend", "value"),
+)
 def update_deselector_all_trend(select_all, selected, deselect_all):
     if 1 in select_all or selected:
         return []
     else:
         return deselect_all
 
+
 @app.callback(
-    Output('select_all_trend', 'value'),
-    Input('deselect_all_trend', 'value'),
-    Input('country_widget_trend', 'value'),
-    State('select_all_trend', 'value'))
+    Output("select_all_trend", "value"),
+    Input("deselect_all_trend", "value"),
+    Input("country_widget_trend", "value"),
+    State("select_all_trend", "value"),
+)
 def update_selector_all_trend(deselect_all, selected, select_all):
     if 0 in deselect_all or selected:
         return []
@@ -609,40 +648,46 @@ def update_selector_all_trend(deselect_all, selected, select_all):
 
 
 @app.callback(
-    Output('country_widget_snapshot', 'value'),
-    Input('select_all_snapshot', 'value'),
-    Input('deselect_all_snapshot', 'value'),
-    State('country_widget_snapshot', 'options'),
-    State('country_widget_snapshot', 'value'))
+    Output("country_widget_snapshot", "value"),
+    Input("select_all_snapshot", "value"),
+    Input("deselect_all_snapshot", "value"),
+    State("country_widget_snapshot", "options"),
+    State("country_widget_snapshot", "value"),
+)
 def selector_all_snapshot(selected, deselected, options, value):
     if 1 in selected:
-        return [i['value'] for i in options]
+        return [i["value"] for i in options]
     elif 0 in deselected:
         return []
     else:
         return value
 
+
 @app.callback(
-    Output('deselect_all_snapshot', 'value'),
-    Input('select_all_snapshot', 'value'),
-    Input('country_widget_snapshot', 'value'),
-    State('deselect_all_snapshot', 'value'))
+    Output("deselect_all_snapshot", "value"),
+    Input("select_all_snapshot", "value"),
+    Input("country_widget_snapshot", "value"),
+    State("deselect_all_snapshot", "value"),
+)
 def update_deselector_all_snapshot(select_all, selected, deselect_all):
     if 1 in select_all or selected:
         return []
     else:
         return deselect_all
 
+
 @app.callback(
-    Output('select_all_snapshot', 'value'),
-    Input('deselect_all_snapshot', 'value'),
-    Input('country_widget_snapshot', 'value'),
-    State('select_all_snapshot', 'value'))
+    Output("select_all_snapshot", "value"),
+    Input("deselect_all_snapshot", "value"),
+    Input("country_widget_snapshot", "value"),
+    State("select_all_snapshot", "value"),
+)
 def update_selector_all_snapshot(deselect_all, selected, select_all):
     if 0 in deselect_all or selected:
         return []
     else:
         return select_all
+
 
 # Define charts
 ## Trend Tab
@@ -696,9 +741,12 @@ def plot_country(year_range, countries, diseases, stat_type):
                         aggregate="sum",
                         type="quantitative",
                         title="Number of deaths",
-                    )
+                    ),
                 ],
-            ).properties(title=f"Number of Children Deaths in Each Country between {year_range[0]} and {year_range[1]}")
+            )
+            .properties(
+                title=f"Number of Children Deaths in Each Country between {year_range[0]} and {year_range[1]}"
+            )
         )
     else:
         year_chart = (
@@ -741,19 +789,22 @@ def plot_country(year_range, countries, diseases, stat_type):
                         aggregate="sum",
                         type="quantitative",
                         title="Deaths per 1000 0-4-year-olds",
-                        format='.2f'
-                    )
+                        format=".2f",
+                    ),
                 ],
             )
-            .properties(title=f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]}")
+            .properties(
+                title=f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]}"
+            )
         )
     return (
-        (year_chart + year_chart.mark_point(size=50).encode(
-                fill=alt.Fill(
-                    "country", title="Country", sort="-y"
-                ),
-        )).properties(
-            width=700, height=300)
+        (
+            year_chart
+            + year_chart.mark_point(size=50).encode(
+                fill=alt.Fill("country", title="Country", sort="-y"),
+            )
+        )
+        .properties(width=700, height=300)
         .configure_title(fontSize=20)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
@@ -795,9 +846,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     type="quantitative",
                     title="Number of deaths",
                 ),
-                color=alt.Color(
-                    "disease", title="Disease", sort="-y", legend=None
-                ),
+                color=alt.Color("disease", title="Disease", sort="-y", legend=None),
                 tooltip=[
                     alt.Tooltip(
                         field="disease",
@@ -814,9 +863,12 @@ def plot_disease(year_range, countries, diseases, stat_type):
                         aggregate="sum",
                         type="quantitative",
                         title="Number of deaths",
-                    )
+                    ),
                 ],
-            ).properties(title=f"Number of Children Deaths from Each Disease between {year_range[0]} and {year_range[1]}")
+            )
+            .properties(
+                title=f"Number of Children Deaths from Each Disease between {year_range[0]} and {year_range[1]}"
+            )
         )
     else:
         year_chart = (
@@ -842,9 +894,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
                     type="quantitative",
                     title="Deaths per thousand 0-4-year-olds",
                 ),
-                color=alt.Color(
-                    "disease", title="Disease", sort="-y", legend=None
-                ),
+                color=alt.Color("disease", title="Disease", sort="-y", legend=None),
                 tooltip=[
                     alt.Tooltip(
                         field="disease",
@@ -861,17 +911,22 @@ def plot_disease(year_range, countries, diseases, stat_type):
                         aggregate="sum",
                         type="quantitative",
                         title="Deaths per 1000 0-4-year-olds",
-                        format='.2f'
-                    )
+                        format=".2f",
+                    ),
                 ],
-            ).properties(title=f"Deaths Per 1000 Children from Each Disease between {year_range[0]} and {year_range[1]}")
+            )
+            .properties(
+                title=f"Deaths Per 1000 Children from Each Disease between {year_range[0]} and {year_range[1]}"
+            )
         )
     return (
-        (year_chart + year_chart.mark_point(size=50).encode(
-                fill=alt.Fill(
-                    "disease", title="Disease", sort="-y"
-                ),
-        )).properties(width=700, height=300)
+        (
+            year_chart
+            + year_chart.mark_point(size=50).encode(
+                fill=alt.Fill("disease", title="Disease", sort="-y"),
+            )
+        )
+        .properties(width=700, height=300)
         .configure_title(fontSize=20)
         .configure_axis(labelFontSize=15, titleFontSize=20)
         .configure_legend(orient="right", labelFontSize=15, titleFontSize=20)
@@ -891,7 +946,7 @@ def plot_disease(year_range, countries, diseases, stat_type):
     Input("default_number_widget_snapshot", "value"),
 )
 def plot_country(year, countries, diseases, stat_type, number_default_countries):
-    if not(number_default_countries):
+    if not (number_default_countries):
         number_default_countries = 0
 
     if stat_type == "raw_stats":
@@ -942,7 +997,9 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
                 sort=[{"field": "count", "order": "descending"}],
             )
             .transform_filter("datum.rank <= " + str(number_default_countries))
-        ).properties(title=f"{number_default_countries} Countries with Most Children Deaths in {year}")
+        ).properties(
+            title=f"{number_default_countries} Countries with Most Children Deaths in {year}"
+        )
     else:
         country_count_pc = (
             disease_count_data_pc[
@@ -954,12 +1011,16 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
             .sum()
             .reset_index()
         )
-        min_count_pc = list(country_count_pc["count_pkc"].sort_values(ascending=False))[
-            -1
-        ] if countries else None
-        max_count_pc = list(country_count_pc["count_pkc"].sort_values(ascending=False))[
-            0
-        ] if countries else None
+        min_count_pc = (
+            list(country_count_pc["count_pkc"].sort_values(ascending=False))[-1]
+            if countries
+            else None
+        )
+        max_count_pc = (
+            list(country_count_pc["count_pkc"].sort_values(ascending=False))[0]
+            if countries
+            else None
+        )
         country_chart = (
             alt.Chart(country_count_pc)
             .mark_bar()
@@ -990,15 +1051,17 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
                     field="count_pkc",
                     type="quantitative",
                     title="Deaths per 1000 0-4-year-olds",
-                    format='.2f'
+                    format=".2f",
                 ),
             )
             .transform_window(
                 window=[{"op": "rank", "as": "rank"}],
                 sort=[{"field": "count_pkc", "order": "descending"}],
             )
-            .transform_filter("datum.rank <= " + str(number_default_countries)
-            ).properties(title=f"{number_default_countries} Countries with Most Deaths Per 1000 Children in {year}")
+            .transform_filter("datum.rank <= " + str(number_default_countries))
+            .properties(
+                title=f"{number_default_countries} Countries with Most Deaths Per 1000 Children in {year}"
+            )
         )
     return (
         country_chart.properties(width=380, height=500)
@@ -1091,7 +1154,7 @@ def plot_disease(year, countries, diseases, stat_type):
                     field="count_pkc",
                     type="quantitative",
                     title="Deaths per 1000 0-4-year-olds",
-                    format='.2f'
+                    format=".2f",
                 ),
             )
             .transform_window(
@@ -1099,7 +1162,9 @@ def plot_disease(year, countries, diseases, stat_type):
                 sort=[{"field": "count_pkc", "order": "descending"}],
             )
             .transform_filter("datum.rank <= 5")
-            .properties(title=f"Diseases Causing Most Deaths Per 1000 Children in {year}")
+            .properties(
+                title=f"Diseases Causing Most Deaths Per 1000 Children in {year}"
+            )
         )
     return (
         disease_chart.properties(width=380, height=500)
