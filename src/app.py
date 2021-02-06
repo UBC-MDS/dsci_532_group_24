@@ -42,6 +42,13 @@ default_country_list = [
     "Central African Republic",
     "Guinea",
 ]
+
+colors = {
+    'title': '#ffd17a',
+    'background': 'white',
+    'controls': '#f3ff94'
+}
+
 # Define elements
 
 ## Trend tab
@@ -235,7 +242,12 @@ default_number_selector_snapshot = html.Div(
 )
 
 ## information tab
-table_header = [html.Thead(html.Tr([html.Th("Variable"), html.Th("Source")]))]
+table_header = [html.Thead(html.Tr([html.Th("Dataset"), html.Th("Data Source"),],
+                                   style={
+                                       'backgroundColor': 'rgb(230, 230, 230)',
+                                       'fontWeight': 'bold'
+                                       }
+                    ))]
 
 row1 = html.Tr(
     [
@@ -282,7 +294,10 @@ information_tab = [
         Although there has been significant progress in reducing preventable child deaths between 1999 and 2019, [2020 WHO fact sheet on improving children survival and well-being](https://www.who.int/en/news-room/fact-sheets/detail/children-reducing-mortality) discusses the prevalence of child mortality that persists in Sub-Saharan Africa, which accounts for the highest child mortality rate in the world. 
         For example, in 2019, 86 out of 1000 newborns in The Democratic Republic of the Congo, a nation with 86.79 million people, do not make it to their fifth birthday. In Chad, the number is as high as 117. By contrast, about 99.6% (996 in 1000) of Canadian newborns are still alive when they are five years old. 
         As internal data analysts for an international non-governmental organization (INGO), we are dedicated to using data to understand infant and child mortality across the African continent. 
-        """
+        """, 
+        style={   
+            "border-radius": 3,
+        }  
     ),
     html.Br(),
     html.P(
@@ -291,8 +306,11 @@ information_tab = [
         The underlying dataset of this app is obtained from Gapminder, an independent Swedish foundation, with a mission to fight misconceptions and promotes a fact-based worldview.
         The table below summarizes the key data sources used in the app. 
         For the source code and detailed user guidance of this app, please visit our GitHub [repository](https://african-children-health-app.herokuapp.com/), where you can also share with us your feedback. 
-        """
-    ),
+        """,
+        style={
+            "border-radius": 3,
+        }  
+),
     html.Br(),
     dbc.Table(table_header + table_body, bordered=True, size=3),
 ]
@@ -308,7 +326,12 @@ app.layout = dbc.Container(
             [
                 dbc.Tab(
                     [
-                        html.H1("Child Diseases and Mortality in Africa, 1990 - 2015"),
+                        html.H1("Child Diseases and Mortality in Africa, 1990 - 2015",
+                            style={
+                                'backgroundColor': colors['title'],
+                                'padding': 20,
+                                'text-align': 'center',
+                                'border-radius': 3}),
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
                         ),
@@ -359,8 +382,12 @@ app.layout = dbc.Container(
                                                             [
                                                                 dbc.Row(
                                                                     html.Div(
-                                                                        id="year_display_snapshot",
+                                                                        id='year_display_snapshot', 
                                                                         children="Selected year: ",
+                                                                        style={
+                                                                            "padding": 15,
+                                                                            "border-radius": 3,
+                                                                        }
                                                                     )
                                                                 ),
                                                                 year_controller_snapshot,
@@ -389,7 +416,7 @@ app.layout = dbc.Container(
                                         ),
                                     ],
                                     style={
-                                        "background-color": "#e6e6e6",
+                                        "background-color": colors['controls'],
                                         "padding": 15,
                                         "border-radius": 3,
                                     },
@@ -461,7 +488,13 @@ app.layout = dbc.Container(
                 dbc.Tab(
                     [
                         html.H1(
-                            "Trends of Child Diseases and Mortality in Africa, 1990 - 2015"
+                            "Trends of Child Diseases and Mortality in Africa, 1990 - 2015",
+                            style={
+                                'backgroundColor': colors['title'],
+                                'padding': 20,
+                                'text-align': 'center',
+                                'border-radius': 3
+                                },
                         ),
                         html.P(
                             "App Developed by Junghoo Kim, Mark Wang and Zhenrui (Eric) Yu"
@@ -513,9 +546,12 @@ app.layout = dbc.Container(
                                                             [
                                                                 dbc.Row(
                                                                     html.Div(
-                                                                        id="year_display_trend",
+                                                                        id='year_display_trend', 
                                                                         children="Selected year: ",
-                                                                    )
+                                                                        style={
+                                                                            "padding": 15,
+                                                                            "border-radius": 3,
+                                                                        })
                                                                 ),
                                                                 year_range_controller_trend,
                                                             ],
@@ -544,7 +580,7 @@ app.layout = dbc.Container(
                                     ],
                                     md=3,
                                     style={
-                                        "background-color": "#e6e6e6",
+                                        "background-color": colors['controls'],
                                         "padding": 15,
                                         "border-radius": 3,
                                     },
@@ -587,7 +623,10 @@ app.layout = dbc.Container(
         )
     ],
     fluid=True,
-    style={"max-width": "95%"},
+    style = {
+        'max-width' : '95%',
+        'backgroundColor': colors['background']
+        },
 )
 
 
@@ -745,7 +784,10 @@ def plot_country(year_range, countries, diseases, stat_type):
                 ],
             )
             .properties(
-                title=f"Number of Children Deaths in Each Country between {year_range[0]} and {year_range[1]}"
+                title=[
+                    f"Number of Children Deaths in Each Country between {year_range[0]} and {year_range[1]},",
+                    f"from the Selected Diseases"
+                ]
             )
         )
     else:
@@ -794,7 +836,10 @@ def plot_country(year_range, countries, diseases, stat_type):
                 ],
             )
             .properties(
-                title=f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]}"
+                title=[
+                    f"Deaths Per 1000 Children in Each Country between {year_range[0]} and {year_range[1]},",
+                    f"from the Selected Diseases"
+                ]
             )
         )
     return (
@@ -867,7 +912,10 @@ def plot_disease(year_range, countries, diseases, stat_type):
                 ],
             )
             .properties(
-                title=f"Number of Children Deaths from Each Disease between {year_range[0]} and {year_range[1]}"
+                title=[
+                    f"Number of Children Deaths from Each Disease between {year_range[0]} and {year_range[1]},",
+                    f"in the Selected Countries"
+                ]
             )
         )
     else:
@@ -916,7 +964,10 @@ def plot_disease(year_range, countries, diseases, stat_type):
                 ],
             )
             .properties(
-                title=f"Deaths Per 1000 Children from Each Disease between {year_range[0]} and {year_range[1]}"
+                title=[
+                    f"Deaths Per 1000 Children from Each Disease between {year_range[0]} and {year_range[1]},",
+                    f"in the Selected Countries"
+                ]
             )
         )
     return (
@@ -998,7 +1049,10 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
             )
             .transform_filter("datum.rank <= " + str(number_default_countries))
         ).properties(
-            title=f"{number_default_countries} Countries with Most Children Deaths in {year}"
+            title=[
+                f"{number_default_countries} Countries with Most Children Deaths in {year},",
+                f"from the Selected Diseases"
+            ]
         )
     else:
         country_count_pc = (
@@ -1060,13 +1114,15 @@ def plot_country(year, countries, diseases, stat_type, number_default_countries)
             )
             .transform_filter("datum.rank <= " + str(number_default_countries))
             .properties(
-                title=f"{number_default_countries} Countries with Most Deaths Per 1000 Children in {year}"
+                title=[
+                    f"{number_default_countries} Countries with Most Deaths Per 1000 Children in {year},",
+                    f"from the Selected Diseases"]
             )
         )
     return (
-        country_chart.properties(width=380, height=500)
-        .configure_title(fontSize=20)
-        .configure_axis(labelFontSize=15, titleFontSize=20)
+        country_chart.properties(width=300, height=400)
+        .configure_title(fontSize=15)
+        .configure_axis(labelFontSize=12, titleFontSize=15)
         .interactive()
         .to_html()
     )
@@ -1119,7 +1175,11 @@ def plot_disease(year, countries, diseases, stat_type):
                 sort=[{"field": "count", "order": "descending"}],
             )
             .transform_filter("datum.rank <= 5")
-            .properties(title=f"Diseases Causing Most Children Deaths in {year}")
+            .properties(title=[
+                f"Diseases Causing Most Children Deaths in {year},",
+                f"in the Selected Countries"
+                ]
+            )
         )
     else:
         disease_count_pc = (
@@ -1163,13 +1223,16 @@ def plot_disease(year, countries, diseases, stat_type):
             )
             .transform_filter("datum.rank <= 5")
             .properties(
-                title=f"Diseases Causing Most Deaths Per 1000 Children in {year}"
+                title=[
+                    f"Diseases Causing Most Deaths Per 1000 Children in {year},",
+                    f"in the Selected Countries"
+                ]
             )
         )
     return (
-        disease_chart.properties(width=380, height=500)
-        .configure_title(fontSize=20)
-        .configure_axis(labelFontSize=15, titleFontSize=20)
+        disease_chart.properties(width=300, height=400)
+        .configure_title(fontSize=15)
+        .configure_axis(labelFontSize=12, titleFontSize=15)
         .interactive()
         .to_html()
     )
