@@ -43,7 +43,7 @@ default_country_list = [
     "Guinea",
 ]
 
-colors = {"title": "#ffd17a", "background": "white", "controls": "#f3ff94"}
+colors = {"title": "#b19cd9", "background": "#c8a2c8", "controls": "#f3ff94"}
 
 # Define elements
 
